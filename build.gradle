@@ -24,7 +24,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.3'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.3'
 
-    implementation 'ch.qos.logback:logback-classic:1.5.6'
+	compileOnly 'org.slf4j:slf4j-api:1.7.36'
     implementation 'org.spongepowered:configurate-yaml:4.1.2'
     implementation 'io.netty:netty-all:4.1.101.Final'
     implementation 'net.kyori:adventure-nbt:4.14.0'
@@ -43,10 +43,6 @@ shadowJar {
 
     manifest {
         attributes('Main-Class': 'ua.nanit.limbo.NanoLimbo')
-    }
-
-    minimize {
-        exclude(dependency('ch.qos.logback:logback-classic:.*:.*'))
     }
 }
 
