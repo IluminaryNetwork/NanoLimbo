@@ -325,7 +325,7 @@ public final class PacketSnapshots {
                     message.writeString(name);
                     if (element != null) {
                         message.writeBoolean(true);
-                        message.writeNamelessCompoundTag(element);
+                        message.writeCompoundTag(element, version);
                     } else {
                         message.writeBoolean(false);
                     }

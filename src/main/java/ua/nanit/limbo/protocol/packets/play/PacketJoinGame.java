@@ -159,7 +159,7 @@ public class PacketJoinGame implements PacketOut {
             msg.writeByte(gameMode);
             msg.writeByte(previousGameMode);
             msg.writeStringsArray(worldNames);
-            msg.writeCompoundTag(dimensionRegistry.getCodec_1_16());
+            msg.writeCompoundTag(dimensionRegistry.getCodec_1_16(), version);
             msg.writeString(dimensionRegistry.getDefaultDimension_1_16().getName());
             msg.writeString(worldName);
             msg.writeLong(hashedSeed);
@@ -177,11 +177,11 @@ public class PacketJoinGame implements PacketOut {
             msg.writeByte(previousGameMode);
             msg.writeStringsArray(worldNames);
             if (version.moreOrEqual(Version.V1_17)) {
-                msg.writeCompoundTag(dimensionRegistry.getCodec_1_17());
-                msg.writeCompoundTag(dimensionRegistry.getDefaultDimension_1_17().getData());
+                msg.writeCompoundTag(dimensionRegistry.getCodec_1_17(), version);
+                msg.writeCompoundTag(dimensionRegistry.getDefaultDimension_1_17().getData(), version);
             } else {
-                msg.writeCompoundTag(dimensionRegistry.getCodec_1_16_2());
-                msg.writeCompoundTag(dimensionRegistry.getDefaultDimension_1_16_2().getData());
+                msg.writeCompoundTag(dimensionRegistry.getCodec_1_16_2(), version);
+                msg.writeCompoundTag(dimensionRegistry.getDefaultDimension_1_16_2().getData(), version);
             }
             msg.writeString(worldName);
             msg.writeLong(hashedSeed);
@@ -199,11 +199,11 @@ public class PacketJoinGame implements PacketOut {
             msg.writeByte(previousGameMode);
             msg.writeStringsArray(worldNames);
             if (version.moreOrEqual(Version.V1_18_2)) {
-                msg.writeCompoundTag(dimensionRegistry.getCodec_1_18_2());
-                msg.writeCompoundTag(dimensionRegistry.getDefaultDimension_1_18_2().getData());
+                msg.writeCompoundTag(dimensionRegistry.getCodec_1_18_2(), version);
+                msg.writeCompoundTag(dimensionRegistry.getDefaultDimension_1_18_2().getData(), version);
             } else {
-                msg.writeCompoundTag(dimensionRegistry.getCodec_1_17());
-                msg.writeCompoundTag(dimensionRegistry.getDefaultDimension_1_17().getData());
+                msg.writeCompoundTag(dimensionRegistry.getCodec_1_17(), version);
+                msg.writeCompoundTag(dimensionRegistry.getDefaultDimension_1_17().getData(), version);
             }
             msg.writeString(worldName);
             msg.writeLong(hashedSeed);
@@ -222,11 +222,11 @@ public class PacketJoinGame implements PacketOut {
             msg.writeByte(previousGameMode);
             msg.writeStringsArray(worldNames);
             if (version.moreOrEqual(Version.V1_19_4)) {
-                msg.writeCompoundTag(dimensionRegistry.getCodec_1_19_4());
+                msg.writeCompoundTag(dimensionRegistry.getCodec_1_19_4(), version);
             } else if (version.moreOrEqual(Version.V1_19_1)) {
-                msg.writeCompoundTag(dimensionRegistry.getCodec_1_19_1());
+                msg.writeCompoundTag(dimensionRegistry.getCodec_1_19_1(), version);
             } else {
-                msg.writeCompoundTag(dimensionRegistry.getCodec_1_19());
+                msg.writeCompoundTag(dimensionRegistry.getCodec_1_19(), version);
             }
             msg.writeString(worldName); // World type
             msg.writeString(worldName);
@@ -246,7 +246,7 @@ public class PacketJoinGame implements PacketOut {
             msg.writeByte(gameMode);
             msg.writeByte(previousGameMode);
             msg.writeStringsArray(worldNames);
-            msg.writeCompoundTag(dimensionRegistry.getCodec_1_20());
+            msg.writeCompoundTag(dimensionRegistry.getCodec_1_20(), version);
             msg.writeString(worldName); // World type
             msg.writeString(worldName);
             msg.writeLong(hashedSeed);
