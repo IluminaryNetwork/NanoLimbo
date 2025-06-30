@@ -213,7 +213,9 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
     }
 
     public void onKnownPacksReceived() {
-        if (clientVersion.moreOrEqual(Version.V1_21_6)) {
+        if (clientVersion.moreOrEqual(Version.V1_21_7)) {
+            writePackets(PacketSnapshots.PACKETS_REGISTRY_DATA_1_21_7);
+        } else if (clientVersion.moreOrEqual(Version.V1_21_6)) {
             writePackets(PacketSnapshots.PACKETS_REGISTRY_DATA_1_21_6);
         } else if (clientVersion.moreOrEqual(Version.V1_21_5)) {
             writePackets(PacketSnapshots.PACKETS_REGISTRY_DATA_1_21_5);
