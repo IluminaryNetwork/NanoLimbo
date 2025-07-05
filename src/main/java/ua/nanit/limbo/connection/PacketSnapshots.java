@@ -101,6 +101,7 @@ public final class PacketSnapshots {
         joinGame.setEnableRespawnScreen(true);
         joinGame.setFlat(false);
         joinGame.setGameMode(server.getConfig().getGameMode());
+        joinGame.setSecureProfile(server.getConfig().isSecureProfile());
         joinGame.setHardcore(false);
         joinGame.setMaxPlayers(server.getConfig().getMaxPlayers());
         joinGame.setPreviousGameMode(-1);
