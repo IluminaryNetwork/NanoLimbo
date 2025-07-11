@@ -48,7 +48,7 @@ public class PacketLoginStart implements PacketIn {
     public void decode(ByteMessage msg, Version version) {
         this.username = msg.readString(256);
 
-        if (version.fromTo(Version.V1_19, Version.V1_19_3)) {
+        if (version.fromTo(Version.V1_19, Version.V1_19_1)) {
             this.playerPublicKey = msg.readPublicKey();
         }
 

@@ -38,7 +38,7 @@ public class PacketEmptyChunk implements PacketOut {
                     .put("MOTION_BLOCKING", longArrayTag).build();
             CompoundBinaryTag rootTag = CompoundBinaryTag.builder()
                     .put("root", tag).build();
-            msg.writeNamelessCompoundTag(rootTag);
+            msg.writeCompoundTag(rootTag, version);
         }
 
         int sections = 24;
