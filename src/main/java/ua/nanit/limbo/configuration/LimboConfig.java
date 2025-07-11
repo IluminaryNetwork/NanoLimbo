@@ -46,6 +46,7 @@ public final class LimboConfig {
 
     private String dimensionType;
     private int gameMode;
+    private boolean secureProfile;
 
     private boolean useBrandName;
     private boolean useJoinMessage;
@@ -100,6 +101,7 @@ public final class LimboConfig {
             dimensionType = "the_end";
         }
         gameMode = conf.node("gameMode").getInt();
+        secureProfile = conf.node("secureProfile").getBoolean();
         useBrandName = conf.node("brandName", "enable").getBoolean();
         useJoinMessage = conf.node("joinMessage", "enable").getBoolean();
         useBossBar = conf.node("bossBar", "enable").getBoolean();
@@ -183,6 +185,10 @@ public final class LimboConfig {
 
     public int getGameMode() {
         return gameMode;
+    }
+
+    public boolean isSecureProfile() {
+        return secureProfile;
     }
 
     public InfoForwarding getInfoForwarding() {
