@@ -1,7 +1,7 @@
 plugins {
     id 'java'
-    id 'com.gradleup.shadow' version '8.3.6'
-    id 'com.github.gmazzo.buildconfig' version '3.1.0'
+    id 'com.gradleup.shadow' version '8.3.8'
+    id 'com.github.gmazzo.buildconfig' version '5.6.7'
 }
 
 group 'ua.nanit'
@@ -39,7 +39,7 @@ dependencies {
 buildConfig {
     className("BuildConfig")
     packageName("ua.nanit.limbo")
-    buildConfigField('String', 'LIMBO_VERSION', "\"${project.version}\"")
+    buildConfigField(String, 'LIMBO_VERSION', provider { project.version } )
 }
 
 shadowJar {
