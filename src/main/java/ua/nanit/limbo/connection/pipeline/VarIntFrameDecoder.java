@@ -49,8 +49,12 @@ public class VarIntFrameDecoder extends ByteToMessageDecoder {
         if (preIndex == in.readerIndex()) {
             return;
         }
-        if (length <= 0) {
+        if (length < 0) {
             throw new DecoderException("Bad VarInt length: " + length);
+        }
+
+        if (length == 0) {
+            return;
         }
 
         if (in.readableBytes() < length) {
