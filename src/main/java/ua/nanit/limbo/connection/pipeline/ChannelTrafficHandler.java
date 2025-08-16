@@ -24,8 +24,7 @@ public class ChannelTrafficHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(@NotNull ChannelHandlerContext ctx, @NotNull Object msg) throws Exception {
-        if (msg instanceof ByteBuf) {
-            ByteBuf in = (ByteBuf) msg;
+        if (msg instanceof ByteBuf in) {
             int bytes = in.readableBytes();
 
             if (maxPacketSize > 0 && bytes > maxPacketSize) {
@@ -95,8 +94,8 @@ public class ChannelTrafficHandler extends ChannelInboundHandlerAdapter {
             double nextBucketTime = this.lastBucketTime + bucketsToMove * this.intervalResolution;
 
             if (bucketsToMove >= this.data.length) {
-                for (int i = 0; i < this.data.length; i++) {
-                    Arrays.fill(this.data[i], 0);
+                for (int[] datum : this.data) {
+                    Arrays.fill(datum, 0);
                 }
                 this.data[0][PACKETS_IDX] = packets;
                 this.data[0][BYTES_IDX] = bytes;

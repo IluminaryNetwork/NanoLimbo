@@ -486,17 +486,7 @@ public enum State {
 
     }
 
-    private static class Mapping {
-
-        private final int packetId;
-        private final Version from;
-        private final Version to;
-
-        public Mapping(int packetId, Version from, Version to) {
-            this.from = from;
-            this.to = to;
-            this.packetId = packetId;
-        }
+    public record Mapping(int packetId, Version from, Version to) {
     }
 
     /**

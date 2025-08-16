@@ -326,8 +326,7 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
         String token = null;
 
         for (Object obj : arr) {
-            if (obj instanceof JsonObject) {
-                JsonObject prop = (JsonObject) obj;
+            if (obj instanceof JsonObject prop) {
                 if (prop.getString("name").equals("bungeeguard-token")) {
                     token = prop.getString("value");
                     break;

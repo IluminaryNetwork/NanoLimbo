@@ -237,21 +237,15 @@ public final class DimensionRegistry {
     }
 
     private Dimension getLegacyDimension(String def) {
-        switch (def) {
-            case "minecraft:overworld": {
-                return new Dimension(0, def, null);
-            }
-            case "minecraft:the_nether": {
-                return new Dimension(-1, def, null);
-            }
-            case "minecraft:the_end": {
-                return new Dimension(1, def, null);
-            }
-            default: {
+        return switch (def) {
+            case "minecraft:overworld" -> new Dimension(0, def, null);
+            case "minecraft:the_nether" -> new Dimension(-1, def, null);
+            case "minecraft:the_end" -> new Dimension(1, def, null);
+            default -> {
                 Log.warning("Undefined dimension type: '%s'. Using 'minecraft:overworld' as default", def);
-                return new Dimension(0, "minecraft:overworld", null);
+                yield new Dimension(0, "minecraft:overworld", null);
             }
-        }
+        };
     }
 
     private Dimension getModernDimension(String def, CompoundBinaryTag tag) {
