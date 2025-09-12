@@ -132,7 +132,11 @@ public final class PacketSnapshots {
         declareCommands.setCommands(Collections.emptyList());
 
         PacketPlayerInfo info = new PacketPlayerInfo();
-        info.setUsername(server.getConfig().getPlayerListUsername());
+        String playerListName = server.getConfig().getPlayerListUsername();
+        if (playerListName.length() > 16) {
+            playerListName = playerListName.substring(0, 16);
+        }
+        info.setUsername(playerListName);
         info.setGameMode(server.getConfig().getGameMode());
         info.setUuid(uuid);
 
