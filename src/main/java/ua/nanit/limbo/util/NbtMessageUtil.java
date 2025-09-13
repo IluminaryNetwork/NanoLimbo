@@ -9,7 +9,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class NbtMessageUtil {
+public final class NbtMessageUtil {
+
+    private NbtMessageUtil() {
+    }
 
     public static NbtMessage create(String json) {
         CompoundBinaryTag compoundBinaryTag = (CompoundBinaryTag) fromJson(JsonParser.parseString(json));
