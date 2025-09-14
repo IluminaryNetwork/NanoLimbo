@@ -51,7 +51,7 @@ Note that the server also will be closed correctly if you just press `Ctrl+C`.
 
 ### Installation
 
-Required software: JRE 11+
+Required software: JRE 17+
 
 The installation process is simple.
 
