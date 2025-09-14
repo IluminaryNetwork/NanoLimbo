@@ -123,8 +123,7 @@ public class ByteMessage extends ByteBuf {
             throw new DecoderException("Cannot receive string longer than " + maxLen * 3 + " (got " + len + " bytes)");
         }
 
-        final String s = buf.toString(buf.readerIndex(), len, StandardCharsets.UTF_8);
-        buf.readerIndex(buf.readerIndex() + len);
+        final String s = buf.readString(len, StandardCharsets.UTF_8);
 
         if (s.length() > maxLen) {
             throw new DecoderException("Cannot receive string longer than " + maxLen + " (got " + s.length() + " characters)");
