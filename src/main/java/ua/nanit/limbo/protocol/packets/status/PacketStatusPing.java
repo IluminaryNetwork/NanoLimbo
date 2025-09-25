@@ -47,5 +47,4 @@ public class PacketStatusPing implements PacketIn, PacketOut {
     public String toString() {
         return getClass().getSimpleName();
     }
-
 }

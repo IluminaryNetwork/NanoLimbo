@@ -17,6 +17,7 @@
 
 package ua.nanit.limbo.protocol;
 
+import lombok.AllArgsConstructor;
 import ua.nanit.limbo.protocol.registry.Version;
 
 import java.util.EnumMap;
@@ -28,15 +29,12 @@ import java.util.function.Function;
  * PacketSnapshot encodes a packet to byte array for each MC version.
  * Some versions have the same snapshot, so there are mappings to avoid data copying
  */
+@AllArgsConstructor
 public class PacketSnapshot implements PacketOut {
 
     private final Class<? extends PacketOut> packetClazz;
     private final Map<Version, byte[]> versionMessages = new EnumMap<>(Version.class);
     private final Map<Version, Version> mappings = new EnumMap<>(Version.class);
-
-    public PacketSnapshot(Class<? extends PacketOut> packetClazz) {
-        this.packetClazz = packetClazz;
-    }
 
     public Class<? extends PacketOut> getPacketClass() {
         return packetClazz;

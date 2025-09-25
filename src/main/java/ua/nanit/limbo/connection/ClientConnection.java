@@ -25,6 +25,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import ua.nanit.limbo.connection.pipeline.PacketDecoder;
 import ua.nanit.limbo.connection.pipeline.PacketEncoder;
@@ -50,6 +51,7 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
+@Getter
 public class ClientConnection extends ChannelInboundHandlerAdapter {
 
     private final LimboServer server;
@@ -80,18 +82,6 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
 
     public String getUsername() {
         return gameProfile.getUsername();
-    }
-
-    public SocketAddress getAddress() {
-        return address;
-    }
-
-    public Version getClientVersion() {
-        return clientVersion;
-    }
-
-    public GameProfile getGameProfile() {
-        return gameProfile;
     }
 
     @Override

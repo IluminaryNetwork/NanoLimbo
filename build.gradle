@@ -31,6 +31,12 @@ dependencies {
     implementation "net.kyori:adventure-nbt:4.24.0"
     implementation "com.grack:nanojson:1.10"
     implementation "com.google.code.gson:gson:2.13.2"
+
+    compileOnly("org.projectlombok:lombok:1.18.42")
+    annotationProcessor("org.projectlombok:lombok:1.18.42")
+
+    testCompileOnly("org.projectlombok:lombok:1.18.42")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.42")
 }
 
 buildConfig {

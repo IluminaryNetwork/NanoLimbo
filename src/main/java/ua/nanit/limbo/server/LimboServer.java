@@ -25,6 +25,7 @@ import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioIoHandler;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.ResourceLeakDetector;
+import lombok.Getter;
 import ua.nanit.limbo.configuration.LimboConfig;
 import ua.nanit.limbo.connection.ClientChannelInitializer;
 import ua.nanit.limbo.connection.ClientConnection;
@@ -37,6 +38,7 @@ import java.util.Locale;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+@Getter
 public final class LimboServer {
 
     private LimboConfig config;
@@ -49,26 +51,6 @@ public final class LimboServer {
     private EventLoopGroup workerGroup;
 
     private CommandManager commandManager;
-
-    public LimboConfig getConfig() {
-        return config;
-    }
-
-    public PacketHandler getPacketHandler() {
-        return packetHandler;
-    }
-
-    public Connections getConnections() {
-        return connections;
-    }
-
-    public DimensionRegistry getDimensionRegistry() {
-        return dimensionRegistry;
-    }
-
-    public CommandManager getCommandManager() {
-        return commandManager;
-    }
 
     public void start() throws Exception {
         config = new LimboConfig(Paths.get("./"));
@@ -146,5 +128,4 @@ public final class LimboServer {
 
         Log.info("Server stopped, Goodbye!");
     }
-
 }

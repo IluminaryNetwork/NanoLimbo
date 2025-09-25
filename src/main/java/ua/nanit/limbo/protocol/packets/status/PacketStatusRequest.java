@@ -26,9 +26,7 @@ import ua.nanit.limbo.server.LimboServer;
 public class PacketStatusRequest implements PacketIn {
 
     @Override
-    public void decode(ByteMessage msg, Version version) {
-
-    }
+    public void decode(ByteMessage msg, Version version) {}
 
     @Override
     public void handle(ClientConnection conn, LimboServer server) {

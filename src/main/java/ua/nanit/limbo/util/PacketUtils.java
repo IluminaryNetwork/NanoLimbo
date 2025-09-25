@@ -8,8 +8,7 @@ import java.util.Locale;
 
 public final class PacketUtils {
 
-    private PacketUtils() {
-    }
+    private PacketUtils() {}
 
     public static String toPacketId(int packetId) {
         return "0x" + Integer.toHexString(packetId).toUpperCase(Locale.ROOT);
@@ -18,5 +17,4 @@ public final class PacketUtils {
     public static String toDetailedInfo(Packet packet, int packetId, Version version, State state) {
         return packet.toString() + "(" + toPacketId(packetId) + ") [" + version + "|" + state + "]";
     }
-
 }

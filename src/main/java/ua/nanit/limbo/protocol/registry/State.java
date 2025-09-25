@@ -17,6 +17,8 @@
 
 package ua.nanit.limbo.protocol.registry;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import ua.nanit.limbo.protocol.Packet;
 import ua.nanit.limbo.protocol.packets.PacketHandshake;
 import ua.nanit.limbo.protocol.packets.configuration.PacketFinishConfiguration;
@@ -34,6 +36,7 @@ import java.util.function.Supplier;
 
 import static ua.nanit.limbo.protocol.registry.Version.*;
 
+@AllArgsConstructor
 public enum State {
 
     HANDSHAKING(0) {
@@ -410,16 +413,11 @@ public enum State {
     public final ProtocolMappings serverBound = new ProtocolMappings();
     public final ProtocolMappings clientBound = new ProtocolMappings();
 
-    State(int stateId) {
-        this.stateId = stateId;
-    }
-
     public static State getById(int stateId) {
         return STATE_BY_ID.get(stateId);
     }
 
     public static class ProtocolMappings {
-
         private final Map<Version, PacketRegistry> registry = new EnumMap<>(Version.class);
 
         public PacketRegistry getRegistry(Version version) {
@@ -453,22 +451,14 @@ public enum State {
 
             return versions;
         }
-
     }
 
+    @AllArgsConstructor
+    @Getter
     public static class PacketRegistry {
-
         private final Version version;
         private final Map<Integer, Supplier<?>> packetsById = new HashMap<>();
         private final Map<Class<?>, Integer> packetIdByClass = new HashMap<>();
-
-        public PacketRegistry(Version version) {
-            this.version = version;
-        }
-
-        public Version getVersion() {
-            return version;
-        }
 
         public Packet getPacket(int packetId) {
             Supplier<?> supplier = packetsById.get(packetId);
@@ -483,11 +473,9 @@ public enum State {
             packetsById.put(packetId, supplier);
             packetIdByClass.put(supplier.get().getClass(), packetId);
         }
-
     }
 
-    public record Mapping(int packetId, Version from, Version to) {
-    }
+    public record Mapping(int packetId, Version from, Version to) {}
 
     /**
      * Map packet id to version range
@@ -500,5 +488,4 @@ public enum State {
     private static Mapping map(int packetId, Version from, Version to) {
         return new Mapping(packetId, from, to);
     }
-
 }

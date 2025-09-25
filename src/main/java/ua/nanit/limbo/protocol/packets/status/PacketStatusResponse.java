@@ -17,11 +17,13 @@
 
 package ua.nanit.limbo.protocol.packets.status;
 
+import lombok.AllArgsConstructor;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.protocol.registry.Version;
 import ua.nanit.limbo.server.LimboServer;
 
+@AllArgsConstructor
 public class PacketStatusResponse implements PacketOut {
 
     private static final String TEMPLATE = "{ \"version\": { \"name\": \"%s\", \"protocol\": %d }, \"players\": { \"max\": %d, \"online\": %d, \"sample\": [] }, \"description\": %s }";
@@ -29,10 +31,6 @@ public class PacketStatusResponse implements PacketOut {
     private LimboServer server;
 
     public PacketStatusResponse() { }
-
-    public PacketStatusResponse(LimboServer server) {
-        this.server = server;
-    }
 
     @Override
     public void encode(ByteMessage msg, Version version) {

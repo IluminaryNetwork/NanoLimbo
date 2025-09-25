@@ -17,6 +17,7 @@
 
 package ua.nanit.limbo.protocol.packets.play;
 
+import lombok.Setter;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.protocol.registry.Version;
@@ -27,23 +28,12 @@ import java.util.UUID;
 /**
  * This packet was very simplified and using only for ADD_PLAYER action
  */
+@Setter
 public class PacketPlayerInfo implements PacketOut {
 
     private int gameMode = 3;
     private String username = "";
     private UUID uuid;
-
-    public void setGameMode(int gameMode) {
-        this.gameMode = gameMode;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
 
     @Override
     public void encode(ByteMessage msg, Version version) {
@@ -89,12 +79,12 @@ public class PacketPlayerInfo implements PacketOut {
         return getClass().getSimpleName();
     }
 
-    public static enum Action {
+    public enum Action {
         ADD_PLAYER,
         INITIALIZE_CHAT,
         UPDATE_GAMEMODE,
         UPDATE_LISTED,
         UPDATE_LATENCY,
-        UPDATE_DISPLAY_NAME;
+        UPDATE_DISPLAY_NAME
     }
 }
