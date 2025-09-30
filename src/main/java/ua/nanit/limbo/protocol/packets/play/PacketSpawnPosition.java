@@ -1,9 +1,11 @@
 package ua.nanit.limbo.protocol.packets.play;
 
+import lombok.AllArgsConstructor;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.protocol.registry.Version;
 
+@AllArgsConstructor
 public class PacketSpawnPosition implements PacketOut {
 
     private long x;
@@ -11,12 +13,6 @@ public class PacketSpawnPosition implements PacketOut {
     private long z;
 
     public PacketSpawnPosition() { }
-
-    public PacketSpawnPosition(long x, long y, long z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
 
     @Override
     public void encode(ByteMessage msg, Version version) {

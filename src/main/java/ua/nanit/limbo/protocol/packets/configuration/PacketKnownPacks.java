@@ -1,6 +1,9 @@
 package ua.nanit.limbo.protocol.packets.configuration;
 
 import io.netty.handler.codec.DecoderException;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import ua.nanit.limbo.connection.ClientConnection;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketIn;
@@ -11,17 +14,11 @@ import ua.nanit.limbo.server.LimboServer;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 public class PacketKnownPacks implements PacketIn, PacketOut {
 
     private List<KnownPack> knownPacks;
-
-    public List<KnownPack> getKnownPacks() {
-        return knownPacks;
-    }
-
-    public void setKnownPacks(List<KnownPack> knownPacks) {
-        this.knownPacks = knownPacks;
-    }
 
     @Override
     public void encode(ByteMessage msg, Version version) {
@@ -61,27 +58,11 @@ public class PacketKnownPacks implements PacketIn, PacketOut {
         return getClass().getSimpleName();
     }
 
+    @AllArgsConstructor
+    @Getter
     public static class KnownPack {
         private final String namespace;
         private final String id;
         private final String version;
-
-        public KnownPack(String namespace, String id, String version) {
-            this.namespace = namespace;
-            this.id = id;
-            this.version = version;
-        }
-
-        public String getNamespace() {
-            return namespace;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public String getVersion() {
-            return version;
-        }
     }
 }

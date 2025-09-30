@@ -17,6 +17,9 @@
 
 package ua.nanit.limbo.server.data;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -28,6 +31,8 @@ import ua.nanit.limbo.util.NbtMessageUtil;
 import java.lang.reflect.Type;
 import java.util.Locale;
 
+@Getter
+@Setter
 public class BossBar {
 
     private NbtMessage text;
@@ -35,40 +40,9 @@ public class BossBar {
     private Color color;
     private Division division;
 
-    public NbtMessage getText() {
-        return text;
-    }
-
-    public float getHealth() {
-        return health;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public Division getDivision() {
-        return division;
-    }
-
-    public void setText(NbtMessage text) {
-        this.text = text;
-    }
-
-    public void setHealth(float health) {
-        this.health = health;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-    public void setDivision(Division division) {
-        this.division = division;
-    }
-
+    @AllArgsConstructor
+    @Getter
     public enum Color {
-
         PINK(0),
         BLUE(1),
         RED(2),
@@ -78,18 +52,11 @@ public class BossBar {
         WHITE(6);
 
         private final int index;
-
-        Color(int index) {
-            this.index = index;
-        }
-
-        public int getIndex() {
-            return index;
-        }
     }
 
+    @AllArgsConstructor
+    @Getter
     public enum Division {
-
         SOLID(0),
         DASHES_6(1),
         DASHES_10(2),
@@ -97,18 +64,9 @@ public class BossBar {
         DASHES_20(4);
 
         private final int index;
-
-        Division(int index) {
-            this.index = index;
-        }
-
-        public int getIndex() {
-            return index;
-        }
     }
 
     public static class Serializer implements TypeSerializer<BossBar> {
-
         @Override
         public BossBar deserialize(Type type, ConfigurationNode node) throws SerializationException {
             BossBar bossBar = new BossBar();
@@ -135,8 +93,6 @@ public class BossBar {
         }
 
         @Override
-        public void serialize(Type type, @Nullable BossBar obj, ConfigurationNode node) {
-
-        }
+        public void serialize(Type type, @Nullable BossBar obj, ConfigurationNode node) {}
     }
 }

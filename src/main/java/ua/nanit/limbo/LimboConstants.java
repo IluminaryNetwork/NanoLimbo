@@ -23,5 +23,4 @@ public final class LimboConstants {
     public static final String BRAND_CHANNEL = "minecraft:brand";
 
     private LimboConstants() {}
-
 }

@@ -17,18 +17,16 @@
 
 package ua.nanit.limbo.protocol.packets.play;
 
+import lombok.Setter;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.NbtMessage;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.protocol.registry.Version;
 
+@Setter
 public class PacketTitleSetSubTitle implements PacketOut {
 
     private NbtMessage subtitle;
-
-    public void setSubtitle(NbtMessage subtitle) {
-        this.subtitle = subtitle;
-    }
 
     @Override
     public void encode(ByteMessage msg, Version version) {

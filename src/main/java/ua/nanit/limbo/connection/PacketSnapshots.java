@@ -84,8 +84,7 @@ public final class PacketSnapshots {
     public static List<PacketSnapshot> PACKETS_EMPTY_CHUNKS;
     public static PacketSnapshot PACKET_START_WAITING_CHUNKS;
 
-    private PacketSnapshots() {
-    }
+    private PacketSnapshots() {}
 
     public static void initPackets(LimboServer server) {
         final String username = server.getConfig().getPingData().getVersion();
@@ -275,8 +274,8 @@ public final class PacketSnapshots {
         packetGameEvent.setValue(0);
         PACKET_START_WAITING_CHUNKS = PacketSnapshot.of(packetGameEvent);
 
-        int chunkXOffset = (int) 0 >> 4; // Default x position is 0
-        int chunkZOffset = (int) 0 >> 4; // Default z position is 0
+        int chunkXOffset = 0; // Default x position is 0
+        int chunkZOffset = 0; // Default z position is 0
         int chunkEdgeSize = 1; // TODO Make configurable?
 
         List<PacketSnapshot> emptyChunks = new ArrayList<>();

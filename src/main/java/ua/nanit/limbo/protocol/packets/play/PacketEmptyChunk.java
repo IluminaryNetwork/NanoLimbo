@@ -1,23 +1,17 @@
 package ua.nanit.limbo.protocol.packets.play;
 
+import lombok.Setter;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.LongArrayBinaryTag;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.protocol.registry.Version;
 
+@Setter
 public class PacketEmptyChunk implements PacketOut {
 
     private int x;
     private int z;
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setZ(int z) {
-        this.z = z;
-    }
 
     @Override
     public void encode(ByteMessage msg, Version version) {

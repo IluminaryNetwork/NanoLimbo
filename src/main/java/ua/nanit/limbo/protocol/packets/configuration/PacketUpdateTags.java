@@ -1,5 +1,7 @@
 package ua.nanit.limbo.protocol.packets.configuration;
 
+import lombok.Getter;
+import lombok.Setter;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.protocol.registry.Version;
@@ -7,17 +9,11 @@ import ua.nanit.limbo.protocol.registry.Version;
 import java.util.List;
 import java.util.Map;
 
+@Getter
+@Setter
 public class PacketUpdateTags implements PacketOut {
 
     private Map<String, Map<String, List<Integer>>> tags;
-
-    public Map<String, Map<String, List<Integer>>> getTags() {
-        return tags;
-    }
-
-    public void setTags(Map<String, Map<String, List<Integer>>> tags) {
-        this.tags = tags;
-    }
 
     @Override
     public void encode(ByteMessage msg, Version version) {

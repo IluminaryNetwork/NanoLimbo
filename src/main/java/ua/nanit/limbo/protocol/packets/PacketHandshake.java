@@ -17,6 +17,7 @@
 
 package ua.nanit.limbo.protocol.packets;
 
+import lombok.Getter;
 import ua.nanit.limbo.connection.ClientConnection;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketIn;
@@ -24,28 +25,13 @@ import ua.nanit.limbo.protocol.registry.State;
 import ua.nanit.limbo.protocol.registry.Version;
 import ua.nanit.limbo.server.LimboServer;
 
+@Getter
 public class PacketHandshake implements PacketIn {
 
     private Version version;
     private String host;
     private int port;
     private State nextState;
-
-    public Version getVersion() {
-        return version;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public State getNextState() {
-        return nextState;
-    }
 
     @Override
     public void decode(ByteMessage msg, Version version) {

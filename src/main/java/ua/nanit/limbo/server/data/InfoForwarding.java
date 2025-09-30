@@ -17,6 +17,7 @@
 
 package ua.nanit.limbo.server.data;
 
+import lombok.Getter;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -26,23 +27,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
 
+@Getter
 public class InfoForwarding {
 
     private Type type;
     private byte[] secretKey;
     private List<String> tokens;
-
-    public Type getType() {
-        return type;
-    }
-
-    public byte[] getSecretKey() {
-        return secretKey;
-    }
-
-    public List<String> getTokens() {
-        return tokens;
-    }
 
     public boolean hasToken(String token) {
         return tokens != null && token != null && tokens.contains(token);
@@ -72,7 +62,6 @@ public class InfoForwarding {
     }
 
     public static class Serializer implements TypeSerializer<InfoForwarding> {
-
         @Override
         public InfoForwarding deserialize(java.lang.reflect.Type type, ConfigurationNode node) throws SerializationException {
             InfoForwarding forwarding = new InfoForwarding();
@@ -95,9 +84,6 @@ public class InfoForwarding {
         }
 
         @Override
-        public void serialize(java.lang.reflect.Type type, @Nullable InfoForwarding obj, ConfigurationNode node) throws SerializationException {
-
-        }
+        public void serialize(java.lang.reflect.Type type, @Nullable InfoForwarding obj, ConfigurationNode node) {}
     }
-
 }

@@ -17,17 +17,15 @@
 
 package ua.nanit.limbo.protocol.packets.login;
 
+import lombok.Setter;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.protocol.registry.Version;
 
+@Setter
 public class PacketDisconnect implements PacketOut {
 
     private String reason;
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
 
     @Override
     public void encode(ByteMessage msg, Version version) {
@@ -38,5 +36,4 @@ public class PacketDisconnect implements PacketOut {
     public String toString() {
         return getClass().getSimpleName();
     }
-
 }

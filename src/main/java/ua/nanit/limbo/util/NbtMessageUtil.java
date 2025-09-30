@@ -11,8 +11,7 @@ import java.util.Map;
 
 public final class NbtMessageUtil {
 
-    private NbtMessageUtil() {
-    }
+    private NbtMessageUtil() {}
 
     public static NbtMessage create(String json) {
         CompoundBinaryTag compoundBinaryTag = (CompoundBinaryTag) fromJson(JsonParser.parseString(json));
@@ -68,21 +67,21 @@ public final class NbtMessageUtil {
             if (listType.equals(tagByteType)) {
                 byte[] bytes = new byte[jsonArray.size()];
                 for (int i = 0; i < bytes.length; i++) {
-                    bytes[i] = (Byte) ((JsonPrimitive) jsonArray.get(i)).getAsNumber();
+                    bytes[i] = (Byte) jsonArray.get(i).getAsNumber();
                 }
 
                 listTag = ByteArrayBinaryTag.byteArrayBinaryTag(bytes);
             } else if (listType.equals(tagIntType)) {
                 int[] ints = new int[jsonArray.size()];
                 for (int i = 0; i < ints.length; i++) {
-                    ints[i] = (Integer) ((JsonPrimitive) jsonArray.get(i)).getAsNumber();
+                    ints[i] = (Integer) jsonArray.get(i).getAsNumber();
                 }
 
                 listTag = IntArrayBinaryTag.intArrayBinaryTag(ints);
             } else if (listType.equals(tagLongType)) {
                 long[] longs = new long[jsonArray.size()];
                 for (int i = 0; i < longs.length; i++) {
-                    longs[i] = (Long) ((JsonPrimitive) jsonArray.get(i)).getAsNumber();
+                    longs[i] = (Long) jsonArray.get(i).getAsNumber();
                 }
 
                 listTag = LongArrayBinaryTag.longArrayBinaryTag(longs);
@@ -108,5 +107,4 @@ public final class NbtMessageUtil {
 
         throw new IllegalArgumentException("Unknown JSON element: " + json);
     }
-
 }

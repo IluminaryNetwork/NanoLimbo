@@ -17,11 +17,15 @@
 
 package ua.nanit.limbo.protocol.registry;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 import java.util.HashMap;
 import java.util.Map;
 
+@RequiredArgsConstructor
+@Getter
 public enum Version {
-
     UNDEFINED(-1, "UNDEFINED"),
     V1_7_2(4, "1.7.2"),
     // 1.7.2-1.7.5 has same protocol numbers
@@ -104,23 +108,6 @@ public enum Version {
     private final int protocolNumber;
     private final String displayName;
     private Version prev;
-
-    Version(int protocolNumber, String displayName) {
-        this.protocolNumber = protocolNumber;
-        this.displayName = displayName;
-    }
-
-    public int getProtocolNumber() {
-        return this.protocolNumber;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public Version getPrev() {
-        return prev;
-    }
 
     public boolean more(Version another) {
         return this.protocolNumber > another.protocolNumber;

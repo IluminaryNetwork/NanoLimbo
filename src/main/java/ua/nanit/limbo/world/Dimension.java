@@ -19,6 +19,4 @@ package ua.nanit.limbo.world;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 
-public record Dimension(int id, String name, CompoundBinaryTag data) {
-
-}
+public record Dimension(int id, String name, CompoundBinaryTag data) {}

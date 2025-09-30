@@ -21,6 +21,7 @@ import io.netty.buffer.*;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import io.netty.util.ByteProcessor;
+import lombok.AllArgsConstructor;
 import net.kyori.adventure.nbt.*;
 import ua.nanit.limbo.connection.PlayerPublicKey;
 import ua.nanit.limbo.protocol.registry.Version;
@@ -37,13 +38,10 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+@AllArgsConstructor
 public class ByteMessage extends ByteBuf {
 
     private final ByteBuf buf;
-
-    public ByteMessage(ByteBuf buf) {
-        this.buf = buf;
-    }
 
     public byte[] toByteArray() {
         byte[] bytes = new byte[buf.readableBytes()];

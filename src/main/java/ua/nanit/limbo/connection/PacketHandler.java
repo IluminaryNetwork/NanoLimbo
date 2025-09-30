@@ -18,6 +18,7 @@
 package ua.nanit.limbo.connection;
 
 import io.netty.buffer.Unpooled;
+import lombok.AllArgsConstructor;
 import ua.nanit.limbo.LimboConstants;
 import ua.nanit.limbo.protocol.packets.PacketHandshake;
 import ua.nanit.limbo.protocol.packets.configuration.PacketFinishConfiguration;
@@ -35,13 +36,10 @@ import ua.nanit.limbo.util.UuidUtil;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+@AllArgsConstructor
 public class PacketHandler {
 
     private final LimboServer server;
-
-    public PacketHandler(LimboServer server) {
-        this.server = server;
-    }
 
     public void handle(ClientConnection conn, PacketHandshake packet) {
         conn.updateVersion(packet.getVersion());
@@ -141,5 +139,4 @@ public class PacketHandler {
     public void handle(ClientConnection conn, PacketKnownPacks packet) {
         conn.onKnownPacksReceived();
     }
-
 }
