@@ -45,9 +45,6 @@ buildConfig {
 shadowJar {
     from "LICENSE"
 
-    archiveClassifier.set("")
-    archiveVersion.set("")
-
     manifest {
         attributes("Main-Class": "ua.nanit.limbo.NanoLimbo")
     }
