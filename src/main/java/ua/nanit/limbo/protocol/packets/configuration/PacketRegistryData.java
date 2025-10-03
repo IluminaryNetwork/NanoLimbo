@@ -1,23 +1,17 @@
 package ua.nanit.limbo.protocol.packets.configuration;
 
+import lombok.Setter;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.MetadataWriter;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.protocol.registry.Version;
 import ua.nanit.limbo.world.DimensionRegistry;
 
+@Setter
 public class PacketRegistryData implements PacketOut {
 
     private DimensionRegistry dimensionRegistry;
     private MetadataWriter metadataWriter;
-
-    public void setDimensionRegistry(DimensionRegistry dimensionRegistry) {
-        this.dimensionRegistry = dimensionRegistry;
-    }
-
-    public void setMetadataWriter(MetadataWriter metadataWriter) {
-        this.metadataWriter = metadataWriter;
-    }
 
     @Override
     public void encode(ByteMessage msg, Version version) {
@@ -27,7 +21,7 @@ public class PacketRegistryData implements PacketOut {
                 return;
             }
         }
-        msg.writeNamelessCompoundTag(dimensionRegistry.getCodec_1_20());
+        msg.writeCompoundTag(dimensionRegistry.getCodec_1_20(), version);
     }
 
     @Override

@@ -25,6 +25,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import ua.nanit.limbo.connection.pipeline.PacketDecoder;
 import ua.nanit.limbo.connection.pipeline.PacketEncoder;
@@ -50,6 +51,7 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
+@Getter
 public class ClientConnection extends ChannelInboundHandlerAdapter {
 
     private final LimboServer server;
@@ -80,18 +82,6 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
 
     public String getUsername() {
         return gameProfile.getUsername();
-    }
-
-    public SocketAddress getAddress() {
-        return address;
-    }
-
-    public Version getClientVersion() {
-        return clientVersion;
-    }
-
-    public GameProfile getGameProfile() {
-        return gameProfile;
     }
 
     @Override
@@ -213,7 +203,13 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
     }
 
     public void onKnownPacksReceived() {
-        if (clientVersion.moreOrEqual(Version.V1_21_5)) {
+        if (clientVersion.moreOrEqual(Version.V1_21_9)) {
+            writePackets(PacketSnapshots.PACKETS_REGISTRY_DATA_1_21_9);
+        } else if (clientVersion.moreOrEqual(Version.V1_21_7)) {
+            writePackets(PacketSnapshots.PACKETS_REGISTRY_DATA_1_21_7);
+        } else if (clientVersion.moreOrEqual(Version.V1_21_6)) {
+            writePackets(PacketSnapshots.PACKETS_REGISTRY_DATA_1_21_6);
+        } else if (clientVersion.moreOrEqual(Version.V1_21_5)) {
             writePackets(PacketSnapshots.PACKETS_REGISTRY_DATA_1_21_5);
         } else if (clientVersion.moreOrEqual(Version.V1_21_4)) {
             writePackets(PacketSnapshots.PACKETS_REGISTRY_DATA_1_21_4);
@@ -322,8 +318,7 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
         String token = null;
 
         for (Object obj : arr) {
-            if (obj instanceof JsonObject) {
-                JsonObject prop = (JsonObject) obj;
+            if (obj instanceof JsonObject prop) {
                 if (prop.getString("name").equals("bungeeguard-token")) {
                     token = prop.getString("value");
                     break;

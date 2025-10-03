@@ -51,7 +51,7 @@ Note that the server also will be closed correctly if you just press `Ctrl+C`.
 
 ### Installation
 
-Required software: JRE 11+
+Required software: JRE 17+
 
 The installation process is simple.
 
@@ -85,8 +85,8 @@ to add some functionality that is suitable for a limbo server and won't signific
 
 Required software:
 
-* JDK 11+
-* Gradle 7+ (optional)
+* JDK 17+
+* Gradle 9+ (optional)
 
 To build a minimized jar, go to the project root directory and run in the terminal:
 

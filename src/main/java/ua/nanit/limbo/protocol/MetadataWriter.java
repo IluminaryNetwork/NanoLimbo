@@ -6,5 +6,4 @@ import ua.nanit.limbo.protocol.registry.Version;
 public interface MetadataWriter {
 
     void writeData(ByteMessage message, Version version);
-
 }

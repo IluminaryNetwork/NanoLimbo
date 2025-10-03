@@ -18,14 +18,16 @@
 package ua.nanit.limbo.server;
 
 import org.slf4j.Logger;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.UtilityClass;
 import org.slf4j.LoggerFactory;
 
-public final class Log {
+@UtilityClass
+public class Log {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("Limbo");
     private static int debugLevel = Level.INFO.getIndex();
-
-    private Log() {}
 
     public static void info(Object msg, Object... args) {
         LOGGER.info(String.format(msg.toString(), args));
@@ -59,8 +61,9 @@ public final class Log {
         debugLevel = level;
     }
 
+    @AllArgsConstructor
+    @Getter
     public enum Level {
-
         ERROR("ERROR", 0),
         WARNING("WARNING", 1),
         INFO("INFO", 2),
@@ -68,18 +71,5 @@ public final class Log {
 
         private final String display;
         private final int index;
-
-        Level(String display, int index) {
-            this.display = display;
-            this.index = index;
-        }
-
-        public String getDisplay() {
-            return display;
-        }
-
-        public int getIndex() {
-            return index;
-        }
     }
 }

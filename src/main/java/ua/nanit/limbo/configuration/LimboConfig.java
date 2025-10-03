@@ -17,6 +17,8 @@
 
 package ua.nanit.limbo.configuration;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.ConfigurationOptions;
 import org.spongepowered.configurate.serialize.TypeSerializerCollection;
@@ -36,6 +38,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+@RequiredArgsConstructor
+@Getter
 public final class LimboConfig {
 
     private final Path root;
@@ -46,6 +50,7 @@ public final class LimboConfig {
 
     private String dimensionType;
     private int gameMode;
+    private boolean secureProfile;
 
     private boolean useBrandName;
     private boolean useJoinMessage;
@@ -75,10 +80,7 @@ public final class LimboConfig {
     private int maxPacketSize;
     private double interval;
     private double maxPacketRate;
-
-    public LimboConfig(Path root) {
-        this.root = root;
-    }
+    private double maxPacketBytesRate;
 
     public void load() throws Exception {
         ConfigurationOptions options = ConfigurationOptions.defaults().serializers(getSerializers());
@@ -100,6 +102,7 @@ public final class LimboConfig {
             dimensionType = "the_end";
         }
         gameMode = conf.node("gameMode").getInt();
+        secureProfile = conf.node("secureProfile").getBoolean();
         useBrandName = conf.node("brandName", "enable").getBoolean();
         useJoinMessage = conf.node("joinMessage", "enable").getBoolean();
         useBossBar = conf.node("bossBar", "enable").getBoolean();
@@ -137,6 +140,7 @@ public final class LimboConfig {
         maxPacketSize = conf.node("traffic", "maxPacketSize").getInt(-1);
         interval = conf.node("traffic", "interval").getDouble(-1.0);
         maxPacketRate = conf.node("traffic", "maxPacketRate").getDouble(-1.0);
+        maxPacketBytesRate = conf.node("traffic", "maxPacketBytesRate").getDouble(-1.0);
     }
 
     private BufferedReader getReader() throws IOException {
@@ -163,117 +167,5 @@ public final class LimboConfig {
                 .register(BossBar.class, new BossBar.Serializer())
                 .register(Title.class, new Title.Serializer())
                 .build();
-    }
-
-    public SocketAddress getAddress() {
-        return address;
-    }
-
-    public int getMaxPlayers() {
-        return maxPlayers;
-    }
-
-    public PingData getPingData() {
-        return pingData;
-    }
-
-    public String getDimensionType() {
-        return dimensionType;
-    }
-
-    public int getGameMode() {
-        return gameMode;
-    }
-
-    public InfoForwarding getInfoForwarding() {
-        return infoForwarding;
-    }
-
-    public long getReadTimeout() {
-        return readTimeout;
-    }
-
-    public int getDebugLevel() {
-        return debugLevel;
-    }
-
-    public boolean isUseBrandName() {
-        return useBrandName;
-    }
-
-    public boolean isUseJoinMessage() {
-        return useJoinMessage;
-    }
-
-    public boolean isUseBossBar() {
-        return useBossBar;
-    }
-
-    public boolean isUseTitle() {
-        return useTitle;
-    }
-
-    public boolean isUsePlayerList() {
-        return usePlayerList;
-    }
-
-    public boolean isUseHeaderAndFooter() {
-        return useHeaderAndFooter;
-    }
-
-    public String getBrandName() {
-        return brandName;
-    }
-
-    public String getJoinMessage() {
-        return joinMessage;
-    }
-
-    public BossBar getBossBar() {
-        return bossBar;
-    }
-
-    public Title getTitle() {
-        return title;
-    }
-
-    public String getPlayerListUsername() {
-        return playerListUsername;
-    }
-
-    public String getPlayerListHeader() {
-        return playerListHeader;
-    }
-
-    public String getPlayerListFooter() {
-        return playerListFooter;
-    }
-
-    public boolean isUseEpoll() {
-        return useEpoll;
-    }
-
-    public int getBossGroupSize() {
-        return bossGroupSize;
-    }
-
-    public int getWorkerGroupSize() {
-        return workerGroupSize;
-    }
-
-    public boolean isUseTrafficLimits() {
-        return useTrafficLimits;
-    }
-
-    public int getMaxPacketSize() {
-        return maxPacketSize;
-    }
-
-    public double getInterval() {
-        return interval;
-    }
-
-    public double getMaxPacketRate() {
-        return maxPacketRate;
     }
 }

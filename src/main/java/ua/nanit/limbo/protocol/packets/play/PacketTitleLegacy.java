@@ -17,11 +17,14 @@
 
 package ua.nanit.limbo.protocol.packets.play;
 
+import lombok.AllArgsConstructor;
+import lombok.Setter;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.protocol.registry.Version;
 import ua.nanit.limbo.server.data.Title;
 
+@Setter
 public class PacketTitleLegacy implements PacketOut {
 
     private Action action;
@@ -33,10 +36,6 @@ public class PacketTitleLegacy implements PacketOut {
         this.title = new PacketTitleSetTitle();
         this.subtitle = new PacketTitleSetSubTitle();
         this.times = new PacketTitleTimes();
-    }
-
-    public void setAction(Action action) {
-        this.action = action;
     }
 
     public void setTitle(Title title) {
@@ -52,17 +51,10 @@ public class PacketTitleLegacy implements PacketOut {
         msg.writeVarInt(action.getId(version));
 
         switch (action) {
-            case SET_TITLE:
-                title.encode(msg, version);
-                break;
-            case SET_SUBTITLE:
-                subtitle.encode(msg, version);
-                break;
-            case SET_TIMES_AND_DISPLAY:
-                times.encode(msg, version);
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid title action: " + action);
+            case SET_TITLE -> title.encode(msg, version);
+            case SET_SUBTITLE -> subtitle.encode(msg, version);
+            case SET_TIMES_AND_DISPLAY -> times.encode(msg, version);
+            default -> throw new IllegalArgumentException("Invalid title action: " + action);
         }
     }
 
@@ -71,6 +63,7 @@ public class PacketTitleLegacy implements PacketOut {
         return getClass().getSimpleName();
     }
 
+    @AllArgsConstructor
     public enum Action {
         SET_TITLE(0),
         SET_SUBTITLE(1),
@@ -78,11 +71,6 @@ public class PacketTitleLegacy implements PacketOut {
 
         private final int id;
         private final int legacyId;
-
-        Action(int id, int legacyId) {
-            this.id = id;
-            this.legacyId = legacyId;
-        }
 
         Action(int id) {
             this(id, id);

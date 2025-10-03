@@ -18,23 +18,17 @@
 package ua.nanit.limbo.protocol.packets.play;
 
 import io.netty.handler.codec.DecoderException;
+import lombok.Setter;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketIn;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.protocol.registry.Version;
 
+@Setter
 public class PacketPluginMessage implements PacketIn, PacketOut {
 
     private String channel;
     private byte[] data;
-
-    public void setChannel(String channel) {
-        this.channel = channel;
-    }
-
-    public void setData(byte[] data) {
-        this.data = data;
-    }
 
     @Override
     public void encode(ByteMessage msg, Version version) {
@@ -57,5 +51,4 @@ public class PacketPluginMessage implements PacketIn, PacketOut {
     public String toString() {
         return getClass().getSimpleName();
     }
-
 }

@@ -17,24 +17,18 @@
 
 package ua.nanit.limbo.protocol.packets.login;
 
+import lombok.Setter;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.protocol.registry.Version;
 
 import java.util.UUID;
 
+@Setter
 public class PacketLoginSuccess implements PacketOut {
 
     private UUID uuid;
     private String username;
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     @Override
     public void encode(ByteMessage msg, Version version) {
@@ -58,5 +52,4 @@ public class PacketLoginSuccess implements PacketOut {
     public String toString() {
         return getClass().getSimpleName();
     }
-
 }

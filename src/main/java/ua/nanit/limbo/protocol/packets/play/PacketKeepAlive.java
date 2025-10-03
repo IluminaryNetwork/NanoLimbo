@@ -17,22 +17,18 @@
 
 package ua.nanit.limbo.protocol.packets.play;
 
+import lombok.Getter;
+import lombok.Setter;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketIn;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.protocol.registry.Version;
 
+@Getter
+@Setter
 public class PacketKeepAlive implements PacketIn, PacketOut {
 
     private long id;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     @Override
     public void encode(ByteMessage msg, Version version) {
