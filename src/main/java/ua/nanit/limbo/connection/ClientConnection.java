@@ -17,15 +17,13 @@
 
 package ua.nanit.limbo.connection;
 
-import com.grack.nanojson.JsonArray;
-import com.grack.nanojson.JsonObject;
-import com.grack.nanojson.JsonParser;
-import com.grack.nanojson.JsonParserException;
+import com.google.gson.*;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import ua.nanit.limbo.connection.pipeline.PacketDecoder;
 import ua.nanit.limbo.connection.pipeline.PacketEncoder;
@@ -65,6 +63,7 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
     private Version clientVersion;
     private SocketAddress address;
 
+    @Setter
     private int velocityLoginMessageId = -1;
 
     public ClientConnection(Channel channel, LimboServer server, PacketDecoder decoder, PacketEncoder encoder) {
@@ -299,35 +298,48 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
         this.address = new InetSocketAddress(host, ((InetSocketAddress) this.address).getPort());
     }
 
-    boolean checkBungeeGuardHandshake(String handshake) {
+    public boolean checkBungeeGuardHandshake(String handshake) {
         String[] split = handshake.split("\00");
 
-        if (split.length != 4)
+        if (split.length != 4) {
             return false;
+        }
 
         String socketAddressHostname = split[1];
         UUID uuid = UuidUtil.fromString(split[2]);
-        JsonArray arr;
-
-        try {
-            arr = JsonParser.array().from(split[3]);
-        } catch (JsonParserException e) {
-            return false;
-        }
 
         String token = null;
 
-        for (Object obj : arr) {
-            if (obj instanceof JsonObject prop) {
-                if (prop.getString("name").equals("bungeeguard-token")) {
-                    token = prop.getString("value");
-                    break;
+        try {
+            JsonElement rootElement = JsonParser.parseString(split[3]);
+            if (!rootElement.isJsonArray()) {
+                return false;
+            }
+
+            JsonArray jsonArray = rootElement.getAsJsonArray();
+            for (JsonElement jsonElement : jsonArray) {
+                if (jsonElement.isJsonObject()) {
+                    JsonObject jsonObject = jsonElement.getAsJsonObject();
+
+                    JsonElement nameElement = jsonObject.get("name");
+                    if (nameElement != null && nameElement.isJsonPrimitive()) {
+                        if (nameElement.getAsString().equals("bungeeguard-token")) {
+                            JsonElement valueElement = jsonObject.get("value");
+                            if (valueElement != null && valueElement.isJsonPrimitive()) {
+                                token = valueElement.getAsString();
+                                break;
+                            }
+                        }
+                    }
                 }
             }
+        } catch (JsonParseException e) {
+            return false;
         }
 
-        if (!server.getConfig().getInfoForwarding().hasToken(token))
+        if (!server.getConfig().getInfoForwarding().hasToken(token)) {
             return false;
+        }
 
         setAddress(socketAddressHostname);
         gameProfile.setUuid(uuid);
@@ -337,15 +349,7 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
         return true;
     }
 
-    int getVelocityLoginMessageId() {
-        return velocityLoginMessageId;
-    }
-
-    void setVelocityLoginMessageId(int velocityLoginMessageId) {
-        this.velocityLoginMessageId = velocityLoginMessageId;
-    }
-
-    boolean checkVelocityKeyIntegrity(ByteMessage buf) {
+    public boolean checkVelocityKeyIntegrity(ByteMessage buf) {
         byte[] signature = new byte[32];
         buf.readBytes(signature);
         byte[] data = new byte[buf.readableBytes()];
