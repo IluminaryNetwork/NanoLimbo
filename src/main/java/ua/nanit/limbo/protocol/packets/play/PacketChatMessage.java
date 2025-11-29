@@ -18,7 +18,9 @@
 package ua.nanit.limbo.protocol.packets.play;
 
 import lombok.AllArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.NbtMessage;
 import ua.nanit.limbo.protocol.PacketOut;
@@ -26,7 +28,9 @@ import ua.nanit.limbo.protocol.registry.Version;
 
 import java.util.UUID;
 
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PacketChatMessage implements PacketOut {
 
     private NbtMessage message;
@@ -34,18 +38,18 @@ public class PacketChatMessage implements PacketOut {
     private UUID sender;
 
     @Override
-    public void encode(ByteMessage msg, Version version) {
-        msg.writeNbtMessage(message, version);
+    public void encode(@NonNull ByteMessage msg, @NonNull Version version) {
+        msg.writeNbtMessage(this.message, version);
         if (version.moreOrEqual(Version.V1_19_1)) {
-            msg.writeBoolean(position.index == PositionLegacy.ACTION_BAR.index);
+            msg.writeBoolean(this.position.index == PositionLegacy.ACTION_BAR.index);
         } else if (version.moreOrEqual(Version.V1_19)) {
-            msg.writeVarInt(position.index);
+            msg.writeVarInt(this.position.index);
         } else if (version.moreOrEqual(Version.V1_8)) {
-            msg.writeByte(position.index);
+            msg.writeByte(this.position.index);
         }
 
         if (version.moreOrEqual(Version.V1_16) && version.less(Version.V1_19))
-            msg.writeUuid(sender);
+            msg.writeUuid(this.sender);
     }
 
     @Override

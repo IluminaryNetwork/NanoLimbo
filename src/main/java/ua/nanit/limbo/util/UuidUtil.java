@@ -17,6 +17,7 @@
 
 package ua.nanit.limbo.util;
 
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 import java.nio.charset.StandardCharsets;
@@ -25,13 +26,17 @@ import java.util.UUID;
 @UtilityClass
 public class UuidUtil {
 
-    public static UUID getOfflineModeUuid(String username) {
+    @NonNull
+    public static UUID getOfflineModeUuid(@NonNull String username) {
         return UUID.nameUUIDFromBytes(("OfflinePlayer:" + username)
                 .getBytes(StandardCharsets.UTF_8));
     }
 
-    public static UUID fromString(String str) {
-        if(str.contains("-")) return UUID.fromString(str);
+    @NonNull
+    public static UUID fromString(@NonNull String str) {
+        if (str.contains("-")) {
+            return UUID.fromString(str);
+        }
         return UUID.fromString(str.replaceFirst("(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5"));
     }
 }

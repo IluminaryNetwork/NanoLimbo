@@ -20,7 +20,9 @@ package ua.nanit.limbo.server;
 import ch.qos.logback.classic.Logger;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.slf4j.LoggerFactory;
 
 @UtilityClass
@@ -29,27 +31,27 @@ public class Log {
     private static final Logger LOGGER = (Logger) LoggerFactory.getLogger("Limbo");
     private static int debugLevel = Level.INFO.getIndex();
 
-    public static void info(Object msg, Object... args) {
+    public static void info(@NonNull Object msg, @Nullable Object... args) {
         LOGGER.info(String.format(msg.toString(), args));
     }
 
-    public static void debug(Object msg, Object... args) {
+    public static void debug(@NonNull Object msg, @Nullable Object... args) {
         LOGGER.debug(String.format(msg.toString(), args));
     }
 
-    public static void warning(Object msg, Object... args) {
+    public static void warning(@NonNull Object msg, @Nullable Object... args) {
         LOGGER.warn(String.format(msg.toString(), args));
     }
 
-    public static void warning(Object msg, Throwable t, Object... args) {
+    public static void warning(@NonNull Object msg, @NonNull Throwable t, @Nullable Object... args) {
         LOGGER.warn(String.format(msg.toString(), args), t);
     }
 
-    public static void error(Object msg, Object... args) {
+    public static void error(@NonNull Object msg, @Nullable Object... args) {
         LOGGER.error(msg.toString(), args);
     }
 
-    public static void error(Object msg, Throwable t, Object... args) {
+    public static void error(@NonNull Object msg, @NonNull Throwable t, @Nullable Object... args) {
         LOGGER.error(String.format(msg.toString(), args), t);
     }
 
@@ -67,6 +69,7 @@ public class Log {
         }
     }
 
+    @Nullable
     private static Logger getRootLogger() {
         return (Logger) LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
     }

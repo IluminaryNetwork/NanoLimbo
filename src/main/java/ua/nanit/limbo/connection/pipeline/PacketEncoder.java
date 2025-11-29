@@ -20,6 +20,7 @@ package ua.nanit.limbo.connection.pipeline;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
+import lombok.NonNull;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.Packet;
 import ua.nanit.limbo.protocol.PacketSnapshot;
@@ -71,11 +72,11 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> {
         }
     }
 
-    public void updateVersion(Version version) {
+    public void updateVersion(@NonNull Version version) {
         this.version = version;
     }
 
-    public void updateState(State state) {
+    public void updateState(@NonNull State state) {
         this.state = state;
         this.registry = state.clientBound.getRegistry(version);
     }

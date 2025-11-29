@@ -18,12 +18,17 @@
 package ua.nanit.limbo.protocol.packets.login;
 
 import io.netty.buffer.ByteBuf;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.protocol.registry.Version;
 
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PacketLoginPluginRequest implements PacketOut {
 
     private int messageId;
@@ -31,10 +36,10 @@ public class PacketLoginPluginRequest implements PacketOut {
     private ByteBuf data;
 
     @Override
-    public void encode(ByteMessage msg, Version version) {
-        msg.writeVarInt(messageId);
-        msg.writeString(channel);
-        msg.writeBytes(data);
+    public void encode(@NonNull ByteMessage msg, @NonNull Version version) {
+        msg.writeVarInt(this.messageId);
+        msg.writeString(this.channel);
+        msg.writeBytes(this.data);
     }
 
     @Override

@@ -18,6 +18,7 @@
 package ua.nanit.limbo.server.commands;
 
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import ua.nanit.limbo.server.Command;
 import ua.nanit.limbo.server.LimboServer;
 import ua.nanit.limbo.server.Log;
@@ -40,6 +41,7 @@ public class CmdHelp implements Command {
         }
     }
 
+    @NonNull
     @Override
     public String description() {
         return "Show this message";

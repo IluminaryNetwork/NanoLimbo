@@ -18,13 +18,15 @@
 package ua.nanit.limbo.protocol.packets.play;
 
 import lombok.AllArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NonNull;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.protocol.registry.Version;
 import ua.nanit.limbo.server.data.Title;
 
-@Setter
+@Data
+@AllArgsConstructor
 public class PacketTitleLegacy implements PacketOut {
 
     private Action action;
@@ -38,7 +40,7 @@ public class PacketTitleLegacy implements PacketOut {
         this.times = new PacketTitleTimes();
     }
 
-    public void setTitle(Title title) {
+    public void setTitle(@NonNull Title title) {
         this.title.setTitle(title.getTitle());
         this.subtitle.setSubtitle(title.getSubtitle());
         this.times.setFadeIn(title.getFadeIn());
@@ -47,7 +49,7 @@ public class PacketTitleLegacy implements PacketOut {
     }
 
     @Override
-    public void encode(ByteMessage msg, Version version) {
+    public void encode(@NonNull ByteMessage msg, @NonNull Version version) {
         msg.writeVarInt(action.getId(version));
 
         switch (action) {
@@ -76,7 +78,7 @@ public class PacketTitleLegacy implements PacketOut {
             this(id, id);
         }
 
-        public int getId(Version version) {
+        public int getId(@NonNull Version version) {
             return version.less(Version.V1_11) ? legacyId : id;
         }
     }

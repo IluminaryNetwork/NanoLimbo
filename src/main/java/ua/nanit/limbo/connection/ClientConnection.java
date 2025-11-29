@@ -23,6 +23,7 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import ua.nanit.limbo.connection.pipeline.PacketDecoder;
@@ -66,7 +67,10 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
     @Setter
     private int velocityLoginMessageId = -1;
 
-    public ClientConnection(Channel channel, LimboServer server, PacketDecoder decoder, PacketEncoder encoder) {
+    public ClientConnection(@NonNull Channel channel,
+                            @NonNull LimboServer server,
+                            @NonNull PacketDecoder decoder,
+                            @NonNull PacketEncoder encoder) {
         this.server = server;
         this.channel = channel;
         this.decoder = decoder;
@@ -75,10 +79,12 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
         this.gameProfile = new GameProfile();
     }
 
+    @NonNull
     public UUID getUuid() {
         return gameProfile.getUuid();
     }
 
+    @NonNull
     public String getUsername() {
         return gameProfile.getUsername();
     }
@@ -105,7 +111,7 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
         handlePacket(msg);
     }
 
-    public void handlePacket(Object packet) {
+    public void handlePacket(@NonNull Object packet) {
         if (packet instanceof Packet) {
             ((Packet) packet).handle(this, server);
         }
@@ -225,13 +231,13 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
         sendPacket(PacketSnapshots.PACKET_FINISH_CONFIGURATION);
     }
 
-    private void writePackets(List<PacketSnapshot> packets) {
+    private void writePackets(@NonNull List<PacketSnapshot> packets) {
         for (PacketSnapshot packet : packets) {
             writePacket(packet);
         }
     }
 
-    public void disconnectLogin(String reason) {
+    public void disconnectLogin(@NonNull String reason) {
         if (isConnected() && state == State.LOGIN) {
             PacketDisconnect disconnect = new PacketDisconnect();
             disconnect.setReason(reason);
@@ -259,46 +265,49 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
         }
     }
 
-    public void sendPacket(Object packet) {
-        if (isConnected())
+    public void sendPacket(@NonNull Object packet) {
+        if (isConnected()) {
             channel.writeAndFlush(packet, channel.voidPromise());
+        }
     }
 
-    public void sendPacketAndClose(Object packet) {
-        if (isConnected())
+    public void sendPacketAndClose(@NonNull Object packet) {
+        if (isConnected()) {
             channel.writeAndFlush(packet).addListener(ChannelFutureListener.CLOSE);
+        }
     }
 
-    public void writePacket(Object packet) {
-        if (isConnected())
+    public void writePacket(@NonNull Object packet) {
+        if (isConnected()) {
             channel.write(packet, channel.voidPromise());
+        }
     }
 
     public boolean isConnected() {
         return channel.isActive();
     }
 
-    public void updateState(State state) {
+    public void updateState(@NonNull State state) {
         this.state = state;
         decoder.updateState(state);
         encoder.updateState(state);
     }
 
-    public void updateEncoderState(State state) {
+    public void updateEncoderState(@NonNull State state) {
         encoder.updateState(state);
     }
 
-    public void updateVersion(Version version) {
+    public void updateVersion(@NonNull Version version) {
         clientVersion = version;
         decoder.updateVersion(version);
         encoder.updateVersion(version);
     }
 
-    public void setAddress(String host) {
+    public void setAddress(@NonNull String host) {
         this.address = new InetSocketAddress(host, ((InetSocketAddress) this.address).getPort());
     }
 
-    public boolean checkBungeeGuardHandshake(String handshake) {
+    public boolean checkBungeeGuardHandshake(@NonNull String handshake) {
         String[] split = handshake.split("\00");
 
         if (split.length != 4) {
@@ -349,7 +358,7 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
         return true;
     }
 
-    public boolean checkVelocityKeyIntegrity(ByteMessage buf) {
+    public boolean checkVelocityKeyIntegrity(@NonNull ByteMessage buf) {
         byte[] signature = new byte[32];
         buf.readBytes(signature);
         byte[] data = new byte[buf.readableBytes()];
@@ -358,14 +367,16 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
             Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(new SecretKeySpec(server.getConfig().getInfoForwarding().getSecretKey(), "HmacSHA256"));
             byte[] mySignature = mac.doFinal(data);
-            if (!MessageDigest.isEqual(signature, mySignature))
+            if (!MessageDigest.isEqual(signature, mySignature)) {
                 return false;
+            }
         } catch (InvalidKeyException | java.security.NoSuchAlgorithmException e) {
             throw new AssertionError(e);
         }
         int version = buf.readVarInt();
-        if (version != 1)
+        if (version != 1) {
             throw new IllegalStateException("Unsupported forwarding version " + version + ", wanted " + '\001');
+        }
         return true;
     }
 }

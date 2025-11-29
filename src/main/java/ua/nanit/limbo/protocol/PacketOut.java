@@ -17,10 +17,11 @@
 
 package ua.nanit.limbo.protocol;
 
+import lombok.NonNull;
 import ua.nanit.limbo.protocol.registry.Version;
 
 public interface PacketOut extends Packet {
 
     @Override
-    default void decode(ByteMessage msg, Version version) {}
+    default void decode(@NonNull ByteMessage msg, @NonNull Version version) {}
 }

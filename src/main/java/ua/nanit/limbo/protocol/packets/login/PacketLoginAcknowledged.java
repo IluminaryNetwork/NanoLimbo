@@ -17,15 +17,20 @@
 
 package ua.nanit.limbo.protocol.packets.login;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import ua.nanit.limbo.connection.ClientConnection;
 import ua.nanit.limbo.protocol.PacketIn;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.server.LimboServer;
 
+@Data
+@NoArgsConstructor
 public class PacketLoginAcknowledged implements PacketIn, PacketOut {
 
     @Override
-    public void handle(ClientConnection conn, LimboServer server) {
+    public void handle(@NonNull ClientConnection conn, @NonNull LimboServer server) {
         server.getPacketHandler().handle(conn, this);
     }
 

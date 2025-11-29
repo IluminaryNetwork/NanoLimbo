@@ -17,9 +17,12 @@
 
 package ua.nanit.limbo.server;
 
+import lombok.NonNull;
+
 public interface Command {
 
     void execute();
 
+    @NonNull
     String description();
 }

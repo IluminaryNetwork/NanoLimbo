@@ -18,13 +18,11 @@
 package ua.nanit.limbo.protocol;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 public class NbtMessage {
 
     private String json;

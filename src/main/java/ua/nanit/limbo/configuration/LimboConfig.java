@@ -18,6 +18,7 @@
 package ua.nanit.limbo.configuration;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.ConfigurationOptions;
@@ -143,6 +144,7 @@ public final class LimboConfig {
         maxPacketBytesRate = conf.node("traffic", "maxPacketBytesRate").getDouble(-1.0);
     }
 
+    @NonNull
     private BufferedReader getReader() throws IOException {
         String name = "settings.yml";
         Path filePath = Paths.get(root.toString(), name);
@@ -150,8 +152,9 @@ public final class LimboConfig {
         if (!Files.exists(filePath)) {
             InputStream stream = getClass().getResourceAsStream( "/" + name);
 
-            if (stream == null)
+            if (stream == null) {
                 throw new FileNotFoundException("Cannot find settings resource file");
+            }
 
             Files.copy(stream, filePath);
         }
@@ -159,6 +162,7 @@ public final class LimboConfig {
         return Files.newBufferedReader(filePath);
     }
 
+    @NonNull
     private TypeSerializerCollection getSerializers() {
         return TypeSerializerCollection.builder()
                 .register(SocketAddress.class, new SocketAddressSerializer())

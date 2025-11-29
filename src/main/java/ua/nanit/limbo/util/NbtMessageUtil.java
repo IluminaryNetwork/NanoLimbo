@@ -18,6 +18,7 @@
 package ua.nanit.limbo.util;
 
 import com.google.gson.*;
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.nbt.*;
 import ua.nanit.limbo.protocol.NbtMessage;
@@ -30,13 +31,15 @@ import java.util.Map;
 @UtilityClass
 public class NbtMessageUtil {
 
-    public static NbtMessage create(String json) {
+    @NonNull
+    public static NbtMessage create(@NonNull String json) {
         CompoundBinaryTag compoundBinaryTag = (CompoundBinaryTag) fromJson(JsonParser.parseString(json));
 
         return new NbtMessage(json, compoundBinaryTag);
     }
 
-    public static BinaryTag fromJson(JsonElement json) {
+    @NonNull
+    public static BinaryTag fromJson(@NonNull JsonElement json) {
         if (json instanceof JsonPrimitive jsonPrimitive) {
             if (jsonPrimitive.isNumber()) {
                 Number number = json.getAsNumber();

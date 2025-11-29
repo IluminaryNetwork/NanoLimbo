@@ -17,6 +17,7 @@
 
 package ua.nanit.limbo.server.commands;
 
+import lombok.NonNull;
 import ua.nanit.limbo.server.Command;
 import ua.nanit.limbo.server.Log;
 import ua.nanit.limbo.BuildConfig;
@@ -28,6 +29,7 @@ public class CmdVersion implements Command {
         Log.info("Version: %s", BuildConfig.LIMBO_VERSION);
     }
 
+    @NonNull
     @Override
     public String description() {
         return "Display limbo version";

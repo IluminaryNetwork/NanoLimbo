@@ -18,6 +18,7 @@
 package ua.nanit.limbo.connection;
 
 import io.netty.buffer.ByteBufAllocator;
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
@@ -87,7 +88,7 @@ public class PacketSnapshots {
     public static List<PacketSnapshot> PACKETS_EMPTY_CHUNKS;
     public static PacketSnapshot PACKET_START_WAITING_CHUNKS;
 
-    public static void initPackets(LimboServer server) {
+    public static void initPackets(@NonNull LimboServer server) {
         final String username = server.getConfig().getPingData().getVersion();
         final UUID uuid = UuidUtil.getOfflineModeUuid(username);
 
@@ -285,7 +286,7 @@ public class PacketSnapshots {
 
         int chunkXOffset = 0; // Default x position is 0
         int chunkZOffset = 0; // Default z position is 0
-        int chunkEdgeSize = 1; // TODO Make configurable?
+        int chunkEdgeSize = 1;
 
         List<PacketSnapshot> emptyChunks = new ArrayList<>();
         // Make multiple chunks for edges
@@ -301,7 +302,8 @@ public class PacketSnapshots {
         PACKETS_EMPTY_CHUNKS = emptyChunks;
     }
 
-    private static Map<String, Map<String, List<Integer>>> parseUpdateTags(CompoundBinaryTag tags) {
+    @NonNull
+    private static Map<String, Map<String, List<Integer>>> parseUpdateTags(@NonNull CompoundBinaryTag tags) {
         Map<String, Map<String, List<Integer>>> tagsMap = new HashMap<>();
 
         for (Map.Entry<String, ? extends BinaryTag> namedTag : tags) {
@@ -324,7 +326,8 @@ public class PacketSnapshots {
         return tagsMap;
     }
 
-    private static List<PacketSnapshot> createRegistryData(LimboServer server, CompoundBinaryTag dimensionTag) {
+    @NonNull
+    private static List<PacketSnapshot> createRegistryData(@NonNull LimboServer server, @NonNull CompoundBinaryTag dimensionTag) {
         List<PacketSnapshot> packetRegistries = new ArrayList<>();
         for (String registryType : dimensionTag.keySet()) {
             CompoundBinaryTag compoundRegistryType = dimensionTag.getCompound(registryType);

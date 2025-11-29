@@ -17,6 +17,7 @@
 
 package ua.nanit.limbo.server.commands;
 
+import lombok.NonNull;
 import ua.nanit.limbo.server.Command;
 import ua.nanit.limbo.server.Log;
 
@@ -38,6 +39,7 @@ public class CmdMem implements Command {
         Log.info("Max: %d MB", max);
     }
 
+    @NonNull
     @Override
     public String description() {
         return "Display memory usage";

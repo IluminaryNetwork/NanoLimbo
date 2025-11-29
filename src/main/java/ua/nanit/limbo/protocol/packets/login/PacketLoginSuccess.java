@@ -17,29 +17,34 @@
 
 package ua.nanit.limbo.protocol.packets.login;
 
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.protocol.registry.Version;
 
 import java.util.UUID;
 
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PacketLoginSuccess implements PacketOut {
 
     private UUID uuid;
     private String username;
 
     @Override
-    public void encode(ByteMessage msg, Version version) {
+    public void encode(@NonNull ByteMessage msg, @NonNull Version version) {
         if (version.moreOrEqual(Version.V1_16)) {
-            msg.writeUuid(uuid);
+            msg.writeUuid(this.uuid);
         } else if (version.moreOrEqual(Version.V1_7_6)) {
-            msg.writeString(uuid.toString());
+            msg.writeString(this.uuid.toString());
         } else {
-            msg.writeString(uuid.toString().replace("-", ""));
+            msg.writeString(this.uuid.toString().replace("-", ""));
         }
-        msg.writeString(username);
+        msg.writeString(this.username);
         if (version.moreOrEqual(Version.V1_19)) {
             msg.writeVarInt(0);
         }

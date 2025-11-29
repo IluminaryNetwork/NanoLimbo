@@ -17,6 +17,8 @@
 
 package ua.nanit.limbo.server;
 
+import lombok.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ua.nanit.limbo.server.commands.*;
 
 import java.util.*;
@@ -25,15 +27,17 @@ public final class CommandManager extends Thread {
 
     private final Map<String, Command> commands = new HashMap<>();
 
+    @NonNull
     public Map<String, Command> getCommands() {
         return Collections.unmodifiableMap(commands);
     }
 
-    public Command getCommand(String name) {
+    @Nullable
+    public Command getCommand(@NonNull String name) {
         return commands.get(name.toLowerCase(Locale.ROOT));
     }
 
-    public void register(Command cmd, String... aliases) {
+    public void register(@NonNull Command cmd, @NonNull String... aliases) {
         for (String alias : aliases) {
             commands.put(alias.toLowerCase(Locale.ROOT), cmd);
         }

@@ -17,8 +17,7 @@
 
 package ua.nanit.limbo.server.data;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.TypeSerializer;
@@ -26,8 +25,7 @@ import ua.nanit.limbo.util.Colors;
 
 import java.lang.reflect.Type;
 
-@Getter
-@Setter
+@Data
 public class PingData {
 
     private String version;

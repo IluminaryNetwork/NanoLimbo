@@ -18,6 +18,7 @@
 package ua.nanit.limbo.protocol.registry;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
@@ -110,23 +111,23 @@ public enum Version {
     private final String displayName;
     private Version prev;
 
-    public boolean more(Version another) {
+    public boolean more(@NonNull Version another) {
         return this.protocolNumber > another.protocolNumber;
     }
 
-    public boolean moreOrEqual(Version another) {
+    public boolean moreOrEqual(@NonNull Version another) {
         return this.protocolNumber >= another.protocolNumber;
     }
 
-    public boolean less(Version another) {
+    public boolean less(@NonNull Version another) {
         return this.protocolNumber < another.protocolNumber;
     }
 
-    public boolean lessOrEqual(Version another) {
+    public boolean lessOrEqual(@NonNull Version another) {
         return this.protocolNumber <= another.protocolNumber;
     }
 
-    public boolean fromTo(Version min, Version max) {
+    public boolean fromTo(@NonNull Version min, @NonNull Version max) {
         return this.protocolNumber >= min.protocolNumber && this.protocolNumber <= max.protocolNumber;
     }
 
@@ -134,14 +135,17 @@ public enum Version {
         return this != UNDEFINED;
     }
 
+    @NonNull
     public static Version getMin() {
         return V1_7_2;
     }
 
+    @NonNull
     public static Version getMax() {
         return MAX;
     }
 
+    @NonNull
     public static Version of(int protocolNumber) {
         return VERSION_MAP.getOrDefault(protocolNumber, UNDEFINED);
     }

@@ -20,6 +20,7 @@ package ua.nanit.limbo.connection.pipeline;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 import ua.nanit.limbo.server.Log;
 
@@ -65,7 +66,9 @@ public class ChannelTrafficHandler extends ChannelInboundHandlerAdapter {
         super.channelRead(ctx, msg);
     }
 
-    private void closeConnection(ChannelHandlerContext ctx, String reason, Object... args) {
+    private void closeConnection(@NonNull ChannelHandlerContext ctx,
+                                 @NonNull String reason,
+                                 @NonNull Object... args) {
         ctx.close();
         Log.info(reason, args);
     }
@@ -107,7 +110,7 @@ public class ChannelTrafficHandler extends ChannelInboundHandlerAdapter {
                 return;
             }
 
-            int bucketsToMove = (int)(timeDelta / this.intervalResolution);
+            int bucketsToMove = (int) (timeDelta / this.intervalResolution);
             double nextBucketTime = this.lastBucketTime + bucketsToMove * this.intervalResolution;
 
             if (bucketsToMove >= this.data.length) {

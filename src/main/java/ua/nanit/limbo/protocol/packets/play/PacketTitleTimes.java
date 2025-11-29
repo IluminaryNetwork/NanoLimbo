@@ -17,12 +17,17 @@
 
 package ua.nanit.limbo.protocol.packets.play;
 
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.protocol.registry.Version;
 
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PacketTitleTimes implements PacketOut {
 
     private int fadeIn;
@@ -30,7 +35,7 @@ public class PacketTitleTimes implements PacketOut {
     private int fadeOut;
 
     @Override
-    public void encode(ByteMessage msg, Version version) {
+    public void encode(@NonNull ByteMessage msg, @NonNull Version version) {
         msg.writeInt(fadeIn);
         msg.writeInt(stay);
         msg.writeInt(fadeOut);

@@ -17,21 +17,21 @@
 
 package ua.nanit.limbo.protocol.packets.play;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketIn;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.protocol.registry.Version;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PacketKeepAlive implements PacketIn, PacketOut {
 
     private long id;
 
     @Override
-    public void encode(ByteMessage msg, Version version) {
+    public void encode(@NonNull ByteMessage msg, @NonNull Version version) {
         if (version.moreOrEqual(Version.V1_12_2)) {
             msg.writeLong(id);
         } else if (version.moreOrEqual(Version.V1_8)) {
@@ -42,7 +42,7 @@ public class PacketKeepAlive implements PacketIn, PacketOut {
     }
 
     @Override
-    public void decode(ByteMessage msg, Version version) {
+    public void decode(@NonNull ByteMessage msg, @NonNull Version version) {
         if (version.moreOrEqual(Version.V1_12_2)) {
             this.id = msg.readLong();
         } else if (version.moreOrEqual(Version.V1_8)) {

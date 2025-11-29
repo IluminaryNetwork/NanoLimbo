@@ -17,6 +17,7 @@
 
 package ua.nanit.limbo.server.commands;
 
+import lombok.NonNull;
 import ua.nanit.limbo.server.Command;
 
 public class CmdStop implements Command {
@@ -26,6 +27,7 @@ public class CmdStop implements Command {
         System.exit(0);
     }
 
+    @NonNull
     @Override
     public String description() {
         return "Stop the server";

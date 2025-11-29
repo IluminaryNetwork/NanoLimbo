@@ -18,11 +18,14 @@
 package ua.nanit.limbo.protocol.packets.play;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.protocol.registry.Version;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class PacketSpawnPosition implements PacketOut {
@@ -33,9 +36,9 @@ public class PacketSpawnPosition implements PacketOut {
     private long z;
 
     @Override
-    public void encode(ByteMessage msg, Version version) {
+    public void encode(@NonNull ByteMessage msg, @NonNull Version version) {
         if (version.moreOrEqual(Version.V1_21_9)) {
-            msg.writeString(dimensionName);
+            msg.writeString(this.dimensionName);
         }
         msg.writeLong(encodePosition(x, y ,z));
         msg.writeFloat(0);

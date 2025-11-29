@@ -17,6 +17,7 @@
 
 package ua.nanit.limbo.util;
 
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import ua.nanit.limbo.protocol.Packet;
 import ua.nanit.limbo.protocol.registry.State;
@@ -27,11 +28,16 @@ import java.util.Locale;
 @UtilityClass
 public class PacketUtils {
 
+    @NonNull
     public static String toPacketId(int packetId) {
         return "0x" + Integer.toHexString(packetId).toUpperCase(Locale.ROOT);
     }
 
-    public static String toDetailedInfo(Packet packet, int packetId, Version version, State state) {
-        return packet.toString() + "(" + toPacketId(packetId) + ") [" + version + "|" + state + "]";
+    @NonNull
+    public static String toDetailedInfo(@NonNull Packet packet,
+                                        int packetId,
+                                        @NonNull Version version,
+                                        @NonNull State state) {
+        return packet + "(" + toPacketId(packetId) + ") [" + version + "|" + state + "]";
     }
 }

@@ -19,6 +19,7 @@ package ua.nanit.limbo.connection;
 
 import io.netty.buffer.Unpooled;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import ua.nanit.limbo.LimboConstants;
 import ua.nanit.limbo.protocol.packets.PacketHandshake;
 import ua.nanit.limbo.protocol.packets.configuration.PacketFinishConfiguration;
@@ -41,14 +42,14 @@ public class PacketHandler {
 
     private final LimboServer server;
 
-    public void handle(ClientConnection conn, PacketHandshake packet) {
+    public void handle(@NonNull ClientConnection conn, @NonNull PacketHandshake packet) {
         conn.updateVersion(packet.getVersion());
         conn.updateState(packet.getNextState());
 
         Log.debug("Pinged from %s [%s]", conn.getAddress(),
                 conn.getClientVersion().toString());
 
-        if (server.getConfig().getInfoForwarding().isLegacy()) {
+        if (this.server.getConfig().getInfoForwarding().isLegacy()) {
             String[] split = packet.getHost().split("\00");
 
             if (split.length == 3 || split.length == 4) {
@@ -57,22 +58,22 @@ public class PacketHandler {
             } else {
                 conn.disconnectLogin("You've enabled player info forwarding. You need to connect with proxy");
             }
-        } else if (server.getConfig().getInfoForwarding().isBungeeGuard()) {
+        } else if (this.server.getConfig().getInfoForwarding().isBungeeGuard()) {
             if (!conn.checkBungeeGuardHandshake(packet.getHost())) {
                 conn.disconnectLogin("Invalid BungeeGuard token or handshake format");
             }
         }
     }
 
-    public void handle(ClientConnection conn, PacketStatusRequest packet) {
+    public void handle(@NonNull ClientConnection conn, @NonNull PacketStatusRequest packet) {
         conn.sendPacket(new PacketStatusResponse(server));
     }
 
-    public void handle(ClientConnection conn, PacketStatusPing packet) {
+    public void handle(@NonNull ClientConnection conn, @NonNull PacketStatusPing packet) {
         conn.sendPacketAndClose(packet);
     }
 
-    public void handle(ClientConnection conn, PacketLoginStart packet) {
+    public void handle(@NonNull ClientConnection conn, @NonNull PacketLoginStart packet) {
         if (server.getConfig().getMaxPlayers() > 0 &&
                 server.getConnections().getCount() >= server.getConfig().getMaxPlayers()) {
             conn.disconnectLogin("Too many players connected");
@@ -105,7 +106,7 @@ public class PacketHandler {
         conn.fireLoginSuccess();
     }
 
-    public void handle(ClientConnection conn, PacketLoginPluginResponse packet) {
+    public void handle(@NonNull ClientConnection conn, @NonNull PacketLoginPluginResponse packet) {
         if (server.getConfig().getInfoForwarding().isModern()
                 && packet.getMessageId() == conn.getVelocityLoginMessageId()) {
 
@@ -128,15 +129,15 @@ public class PacketHandler {
         }
     }
 
-    public void handle(ClientConnection conn, PacketLoginAcknowledged packet) {
+    public void handle(@NonNull ClientConnection conn, @NonNull PacketLoginAcknowledged packet) {
         conn.onLoginAcknowledgedReceived();
     }
 
-    public void handle(ClientConnection conn, PacketFinishConfiguration packet) {
+    public void handle(@NonNull ClientConnection conn, @NonNull PacketFinishConfiguration packet) {
         conn.spawnPlayer();
     }
 
-    public void handle(ClientConnection conn, PacketKnownPacks packet) {
+    public void handle(@NonNull ClientConnection conn, @NonNull PacketKnownPacks packet) {
         conn.onKnownPacksReceived();
     }
 }

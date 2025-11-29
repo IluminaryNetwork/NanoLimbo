@@ -19,6 +19,8 @@ package ua.nanit.limbo.protocol.registry;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import ua.nanit.limbo.protocol.Packet;
 import ua.nanit.limbo.protocol.packets.PacketHandshake;
 import ua.nanit.limbo.protocol.packets.configuration.PacketFinishConfiguration;
@@ -426,6 +428,7 @@ public enum State {
     public final ProtocolMappings serverBound = new ProtocolMappings();
     public final ProtocolMappings clientBound = new ProtocolMappings();
 
+    @Nullable
     public static State getById(int stateId) {
         return STATE_BY_ID.get(stateId);
     }
@@ -433,20 +436,22 @@ public enum State {
     public static class ProtocolMappings {
         private final Map<Version, PacketRegistry> registry = new EnumMap<>(Version.class);
 
-        public PacketRegistry getRegistry(Version version) {
-            return registry.getOrDefault(version, registry.get(getMin()));
+        @NonNull
+        public PacketRegistry getRegistry(@NonNull Version version) {
+            return this.registry.getOrDefault(version, this.registry.get(getMin()));
         }
 
-        public void register(Supplier<?> packet, Mapping... mappings) {
+        public void register(@NonNull Supplier<?> packet, @NonNull Mapping... mappings) {
             for (Mapping mapping : mappings) {
                 for (Version ver : getRange(mapping)) {
-                    PacketRegistry reg = registry.computeIfAbsent(ver, PacketRegistry::new);
+                    PacketRegistry reg = this.registry.computeIfAbsent(ver, PacketRegistry::new);
                     reg.register(mapping.packetId, packet);
                 }
             }
         }
 
-        private Collection<Version> getRange(Mapping mapping) {
+        @NonNull
+        private Collection<Version> getRange(@NonNull Mapping mapping) {
             Version from = mapping.from;
             Version curr = mapping.to;
 
@@ -478,17 +483,17 @@ public enum State {
             return supplier == null ? null : (Packet) supplier.get();
         }
 
-        public int getPacketId(Class<?> packetClass) {
+        public int getPacketId(@NonNull Class<?> packetClass) {
             return packetIdByClass.getOrDefault(packetClass, -1);
         }
 
-        public void register(int packetId, Supplier<?> supplier) {
-            packetsById.put(packetId, supplier);
-            packetIdByClass.put(supplier.get().getClass(), packetId);
+        public void register(int packetId, @NonNull Supplier<?> supplier) {
+            this.packetsById.put(packetId, supplier);
+            this.packetIdByClass.put(supplier.get().getClass(), packetId);
         }
     }
 
-    public record Mapping(int packetId, Version from, Version to) {
+    public record Mapping(int packetId, @NonNull Version from, @NonNull Version to) {
     }
 
     /**
@@ -499,7 +504,7 @@ public enum State {
      * @param to       Last version (include)
      * @return Created mapping
      */
-    private static Mapping map(int packetId, Version from, Version to) {
+    private static Mapping map(int packetId, @NonNull Version from, @NonNull Version to) {
         return new Mapping(packetId, from, to);
     }
 }

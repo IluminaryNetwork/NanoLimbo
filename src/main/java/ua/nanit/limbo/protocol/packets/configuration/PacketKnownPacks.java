@@ -18,9 +18,7 @@
 package ua.nanit.limbo.protocol.packets.configuration;
 
 import io.netty.handler.codec.DecoderException;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import ua.nanit.limbo.connection.ClientConnection;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketIn;
@@ -31,24 +29,25 @@ import ua.nanit.limbo.server.LimboServer;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PacketKnownPacks implements PacketIn, PacketOut {
 
     private List<KnownPack> knownPacks;
 
     @Override
-    public void encode(ByteMessage msg, Version version) {
+    public void encode(@NonNull ByteMessage msg, @NonNull Version version) {
         msg.writeVarInt(this.knownPacks.size());
         for (KnownPack knownPack : this.knownPacks) {
-            msg.writeString(knownPack.getNamespace());
-            msg.writeString(knownPack.getId());
-            msg.writeString(knownPack.getVersion());
+            msg.writeString(knownPack.namespace());
+            msg.writeString(knownPack.id());
+            msg.writeString(knownPack.version());
         }
     }
 
     @Override
-    public void decode(ByteMessage msg, Version version) {
+    public void decode(@NonNull ByteMessage msg, @NonNull Version version) {
         int size = msg.readVarInt();
         if (size > 16) {
             throw new DecoderException("Cannot receive known packs larger than 16");
@@ -66,7 +65,7 @@ public class PacketKnownPacks implements PacketIn, PacketOut {
     }
 
     @Override
-    public void handle(ClientConnection conn, LimboServer server) {
+    public void handle(@NonNull ClientConnection conn, @NonNull LimboServer server) {
         server.getPacketHandler().handle(conn, this);
     }
 
@@ -75,11 +74,6 @@ public class PacketKnownPacks implements PacketIn, PacketOut {
         return getClass().getSimpleName();
     }
 
-    @AllArgsConstructor
-    @Getter
-    public static class KnownPack {
-        private final String namespace;
-        private final String id;
-        private final String version;
+    public record KnownPack(@NonNull String namespace, @NonNull String id, @NonNull String version) {
     }
 }
