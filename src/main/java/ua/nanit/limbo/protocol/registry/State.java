@@ -406,7 +406,7 @@ public enum State {
                     map(0x22, V1_21_5, V1_21_7),
                     map(0x26, V1_21_9, Version.getMax())
             );
-            clientBound.register(PacketEmptyChunk::new,
+            clientBound.register(PacketChunkWithLight::new,
                     map(0x25, V1_20_3, V1_20_3),
                     map(0x27, V1_20_5, V1_21),
                     map(0x28, V1_21_2, V1_21_4),

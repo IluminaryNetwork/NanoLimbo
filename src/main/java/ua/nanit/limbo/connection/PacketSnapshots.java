@@ -292,11 +292,11 @@ public class PacketSnapshots {
         // Make multiple chunks for edges
         for (int chunkX = chunkXOffset - chunkEdgeSize; chunkX <= chunkXOffset + chunkEdgeSize; ++chunkX) {
             for (int chunkZ = chunkZOffset - chunkEdgeSize; chunkZ <= chunkZOffset + chunkEdgeSize; ++chunkZ) {
-                PacketEmptyChunk packetEmptyChunk = new PacketEmptyChunk();
-                packetEmptyChunk.setX(chunkX);
-                packetEmptyChunk.setZ(chunkZ);
+                PacketChunkWithLight packetChunkWithLight = new PacketChunkWithLight();
+                packetChunkWithLight.setX(chunkX);
+                packetChunkWithLight.setZ(chunkZ);
 
-                emptyChunks.add(PacketSnapshot.of(packetEmptyChunk));
+                emptyChunks.add(PacketSnapshot.of(packetChunkWithLight));
             }
         }
         PACKETS_EMPTY_CHUNKS = emptyChunks;

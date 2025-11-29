@@ -192,10 +192,19 @@ public class ByteMessage extends ByteBuf {
     }
 
     public void writeLongArray(long[] array) {
+        if (array == null) {
+            writeVarInt(0);
+            return;
+        }
+
         writeVarInt(array.length);
         for (long i : array) {
             writeLong(i);
         }
+    }
+
+    public void writeBitSet(BitSet bitSet) {
+        writeLongArray((bitSet != null ? bitSet.toLongArray() : null));
     }
 
     public void writeCompoundTagArray(CompoundBinaryTag[] compoundTags) {
