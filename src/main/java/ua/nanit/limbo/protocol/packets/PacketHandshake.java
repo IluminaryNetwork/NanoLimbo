@@ -52,12 +52,12 @@ public class PacketHandshake implements PacketIn {
     }
 
     @Override
-    public String toString() {
-        return getClass().getSimpleName();
+    public void handle(@NonNull ClientConnection conn, @NonNull LimboServer server) {
+        server.getPacketHandler().handle(conn, this);
     }
 
     @Override
-    public void handle(@NonNull ClientConnection conn, @NonNull LimboServer server) {
-        server.getPacketHandler().handle(conn, this);
+    public String toString() {
+        return getClass().getSimpleName();
     }
 }

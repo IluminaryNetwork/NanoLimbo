@@ -150,7 +150,7 @@ public final class LimboConfig {
         Path filePath = Paths.get(root.toString(), name);
 
         if (!Files.exists(filePath)) {
-            InputStream stream = getClass().getResourceAsStream( "/" + name);
+            InputStream stream = getClass().getResourceAsStream("/" + name);
 
             if (stream == null) {
                 throw new FileNotFoundException("Cannot find settings resource file");

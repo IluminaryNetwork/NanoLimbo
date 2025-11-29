@@ -37,18 +37,18 @@ public class PacketPluginMessage implements PacketIn, PacketOut {
 
     @Override
     public void encode(@NonNull ByteMessage msg, @NonNull Version version) {
-        msg.writeString(channel);
-        msg.writeBytes(data);
+        msg.writeString(this.channel);
+        msg.writeBytes(this.data);
     }
 
     @Override
     public void decode(@NonNull ByteMessage msg, @NonNull Version version) {
-        channel = msg.readString();
+        this.channel = msg.readString();
         int readableBytes = msg.readableBytes();
         if (readableBytes > Short.MAX_VALUE) {
             throw new DecoderException("Cannot receive payload larger than " + Short.MAX_VALUE);
         }
-        data = new byte[msg.readableBytes()];
+        this.data = new byte[msg.readableBytes()];
         msg.readBytes(data);
     }
 

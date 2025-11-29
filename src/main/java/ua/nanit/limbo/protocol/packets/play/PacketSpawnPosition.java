@@ -40,7 +40,7 @@ public class PacketSpawnPosition implements PacketOut {
         if (version.moreOrEqual(Version.V1_21_9)) {
             msg.writeString(this.dimensionName);
         }
-        msg.writeLong(encodePosition(x, y ,z));
+        msg.writeLong(encodePosition(this.x, this.y, this.z));
         msg.writeFloat(0);
         if (version.moreOrEqual(Version.V1_21_9)) {
             msg.writeFloat(0);

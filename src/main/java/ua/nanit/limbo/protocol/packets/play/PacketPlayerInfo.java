@@ -63,7 +63,7 @@ public class PacketPlayerInfo implements PacketOut {
                 msg.writeVarInt(this.gameMode); //Gamemode
                 return;
             }
-            
+
             msg.writeVarInt(0); // Add player action
             msg.writeVarInt(1);
             msg.writeUuid(this.uuid);
@@ -72,7 +72,7 @@ public class PacketPlayerInfo implements PacketOut {
             msg.writeVarInt(this.gameMode);
             msg.writeVarInt(60);
             msg.writeBoolean(false);
-            
+
             if (version.moreOrEqual(Version.V1_19)) {
                 msg.writeBoolean(false);
             }
