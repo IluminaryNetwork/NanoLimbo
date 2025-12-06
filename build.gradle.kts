@@ -18,6 +18,10 @@ dependencies {
     implementation("io.netty:netty-handler:4.2.7.Final")
     implementation("io.netty:netty-transport-native-epoll:4.2.7.Final:linux-x86_64")
     implementation("io.netty:netty-transport-native-epoll:4.2.7.Final:linux-aarch_64")
+    implementation("io.netty:netty-transport-native-io_uring:4.2.7.Final:linux-x86_64")
+    implementation("io.netty:netty-transport-native-io_uring:4.2.7.Final:linux-aarch_64")
+    implementation("io.netty:netty-transport-native-kqueue:4.2.7.Final:osx-x86_64")
+    implementation("io.netty:netty-transport-native-kqueue:4.2.7.Final:osx-aarch_64")
 
     implementation("net.kyori:adventure-nbt:4.25.0")
     implementation("com.google.code.gson:gson:2.13.2")

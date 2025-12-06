@@ -24,11 +24,11 @@ import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.ConfigurationOptions;
 import org.spongepowered.configurate.serialize.TypeSerializerCollection;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
-import ua.nanit.limbo.util.Colors;
 import ua.nanit.limbo.server.data.BossBar;
 import ua.nanit.limbo.server.data.InfoForwarding;
 import ua.nanit.limbo.server.data.PingData;
 import ua.nanit.limbo.server.data.Title;
+import ua.nanit.limbo.util.Colors;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -73,7 +73,7 @@ public final class LimboConfig {
     private long readTimeout;
     private int debugLevel;
 
-    private boolean useEpoll;
+    private String transportType;
     private int bossGroupSize;
     private int workerGroupSize;
 
@@ -133,7 +133,7 @@ public final class LimboConfig {
         readTimeout = conf.node("readTimeout").getLong();
         debugLevel = conf.node("debugLevel").getInt();
 
-        useEpoll = conf.node("netty", "useEpoll").getBoolean(true);
+        transportType = conf.node("netty", "transportType").getString("epoll");
         bossGroupSize = conf.node("netty", "threads", "bossGroup").getInt(1);
         workerGroupSize = conf.node("netty", "threads", "workerGroup").getInt(4);
 
