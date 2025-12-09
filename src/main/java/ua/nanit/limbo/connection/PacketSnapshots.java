@@ -82,6 +82,7 @@ public class PacketSnapshots {
     public static List<PacketSnapshot> PACKETS_REGISTRY_DATA_1_21_6;
     public static List<PacketSnapshot> PACKETS_REGISTRY_DATA_1_21_7;
     public static List<PacketSnapshot> PACKETS_REGISTRY_DATA_1_21_9;
+    public static List<PacketSnapshot> PACKETS_REGISTRY_DATA_1_21_11;
 
     public static PacketSnapshot PACKET_FINISH_CONFIGURATION;
 
@@ -240,9 +241,12 @@ public class PacketSnapshots {
             return packetKnownPacks;
         });
 
+        // TODO Simplify...
         PACKET_UPDATE_TAGS = PacketSnapshot.of(PacketUpdateTags.class, (version) -> {
             PacketUpdateTags packetUpdateTags = new PacketUpdateTags();
-            if (version.moreOrEqual(Version.V1_21_9)) {
+            if (version.moreOrEqual(Version.V1_21_11)) {
+                packetUpdateTags.setTags(parseUpdateTags(server.getDimensionRegistry().getTags_1_21_11()));
+            } else if (version.moreOrEqual(Version.V1_21_9)) {
                 packetUpdateTags.setTags(parseUpdateTags(server.getDimensionRegistry().getTags_1_21_9()));
             } else if (version.moreOrEqual(Version.V1_21_7)) {
                 packetUpdateTags.setTags(parseUpdateTags(server.getDimensionRegistry().getTags_1_21_7()));
@@ -268,6 +272,7 @@ public class PacketSnapshots {
 
         PACKET_REGISTRY_DATA = PacketSnapshot.of(packetRegistryData);
 
+        // TODO Simplify...
         PACKETS_REGISTRY_DATA_1_20_5 = createRegistryData(server, server.getDimensionRegistry().getCodec_1_20_5());
         PACKETS_REGISTRY_DATA_1_21 = createRegistryData(server, server.getDimensionRegistry().getCodec_1_21());
         PACKETS_REGISTRY_DATA_1_21_2 = createRegistryData(server, server.getDimensionRegistry().getCodec_1_21_2());
@@ -276,6 +281,7 @@ public class PacketSnapshots {
         PACKETS_REGISTRY_DATA_1_21_6 = createRegistryData(server, server.getDimensionRegistry().getCodec_1_21_6());
         PACKETS_REGISTRY_DATA_1_21_7 = createRegistryData(server, server.getDimensionRegistry().getCodec_1_21_7());
         PACKETS_REGISTRY_DATA_1_21_9 = createRegistryData(server, server.getDimensionRegistry().getCodec_1_21_9());
+        PACKETS_REGISTRY_DATA_1_21_11 = createRegistryData(server, server.getDimensionRegistry().getCodec_1_21_11());
 
         PACKET_FINISH_CONFIGURATION = PacketSnapshot.of(new PacketFinishConfiguration());
 
