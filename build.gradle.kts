@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "ua.nanit"
-version = "1.10.1"
+version = "1.10.2"
 
 repositories {
     mavenCentral()
