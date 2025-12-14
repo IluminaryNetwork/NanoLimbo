@@ -18,24 +18,27 @@
 package ua.nanit.limbo.protocol.packets.status;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.protocol.registry.Version;
 import ua.nanit.limbo.server.LimboServer;
 
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class PacketStatusResponse implements PacketOut {
 
     private static final String TEMPLATE = "{ \"version\": { \"name\": \"%s\", \"protocol\": %d }, \"players\": { \"max\": %d, \"online\": %d, \"sample\": [] }, \"description\": %s }";
 
     private LimboServer server;
 
-    public PacketStatusResponse() { }
-
     @Override
-    public void encode(ByteMessage msg, Version version) {
+    public void encode(@NonNull ByteMessage msg, @NonNull Version version) {
         int protocol;
-        int staticProtocol =  server.getConfig().getPingData().getProtocol();
+        int staticProtocol = server.getConfig().getPingData().getProtocol();
 
         if (staticProtocol > 0) {
             protocol = staticProtocol;
@@ -58,7 +61,12 @@ public class PacketStatusResponse implements PacketOut {
         return getClass().getSimpleName();
     }
 
-    private String getResponseJson(String version, int protocol, int maxPlayers, int online, String description) {
+    @NonNull
+    private String getResponseJson(@NonNull String version,
+                                   int protocol,
+                                   int maxPlayers,
+                                   int online,
+                                   @NonNull String description) {
         return String.format(TEMPLATE, version, protocol, maxPlayers, online, description);
     }
 }

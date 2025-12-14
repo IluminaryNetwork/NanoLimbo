@@ -1,8 +1,26 @@
+/*
+ * Copyright (C) 2020 Nan1t
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ua.nanit.limbo.connection.pipeline;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 import ua.nanit.limbo.server.Log;
 
@@ -48,7 +66,9 @@ public class ChannelTrafficHandler extends ChannelInboundHandlerAdapter {
         super.channelRead(ctx, msg);
     }
 
-    private void closeConnection(ChannelHandlerContext ctx, String reason, Object... args) {
+    private void closeConnection(@NonNull ChannelHandlerContext ctx,
+                                 @NonNull String reason,
+                                 @NonNull Object... args) {
         ctx.close();
         Log.info(reason, args);
     }
@@ -90,7 +110,7 @@ public class ChannelTrafficHandler extends ChannelInboundHandlerAdapter {
                 return;
             }
 
-            int bucketsToMove = (int)(timeDelta / this.intervalResolution);
+            int bucketsToMove = (int) (timeDelta / this.intervalResolution);
             double nextBucketTime = this.lastBucketTime + bucketsToMove * this.intervalResolution;
 
             if (bucketsToMove >= this.data.length) {

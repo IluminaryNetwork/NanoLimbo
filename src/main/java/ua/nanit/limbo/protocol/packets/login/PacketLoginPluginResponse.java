@@ -18,14 +18,19 @@
 package ua.nanit.limbo.protocol.packets.login;
 
 import io.netty.handler.codec.DecoderException;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import ua.nanit.limbo.connection.ClientConnection;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketIn;
 import ua.nanit.limbo.protocol.registry.Version;
 import ua.nanit.limbo.server.LimboServer;
 
-@Getter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PacketLoginPluginResponse implements PacketIn {
 
     private int messageId;
@@ -33,21 +38,21 @@ public class PacketLoginPluginResponse implements PacketIn {
     private ByteMessage data;
 
     @Override
-    public void decode(ByteMessage msg, Version version) {
-        messageId = msg.readVarInt();
-        successful = msg.readBoolean();
+    public void decode(@NonNull ByteMessage msg, @NonNull Version version) {
+        this.messageId = msg.readVarInt();
+        this.successful = msg.readBoolean();
 
         if (msg.readableBytes() > 0) {
             int readableBytes = msg.readableBytes();
             if (readableBytes > Short.MAX_VALUE) {
                 throw new DecoderException("Cannot receive payload larger than " + Short.MAX_VALUE);
             }
-            data = new ByteMessage(msg.readBytes(readableBytes));
+            this.data = new ByteMessage(msg.readBytes(readableBytes));
         }
     }
 
     @Override
-    public void handle(ClientConnection conn, LimboServer server) {
+    public void handle(@NonNull ClientConnection conn, @NonNull LimboServer server) {
         server.getPacketHandler().handle(conn, this);
     }
 

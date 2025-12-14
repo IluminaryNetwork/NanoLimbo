@@ -19,11 +19,6 @@ package ua.nanit.limbo.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
-import io.netty.channel.epoll.Epoll;
-import io.netty.channel.epoll.EpollIoHandler;
-import io.netty.channel.epoll.EpollServerSocketChannel;
-import io.netty.channel.nio.NioIoHandler;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.ResourceLeakDetector;
 import lombok.Getter;
 import ua.nanit.limbo.configuration.LimboConfig;
@@ -84,19 +79,27 @@ public final class LimboServer {
     }
 
     private void startBootstrap() {
-        ChannelFactory<? extends ServerChannel> channelFactory;
-
-        if (config.isUseEpoll() && Epoll.isAvailable()) {
-            bossGroup = new MultiThreadIoEventLoopGroup(config.getBossGroupSize(), EpollIoHandler.newFactory());
-            workerGroup = new MultiThreadIoEventLoopGroup(config.getWorkerGroupSize(), EpollIoHandler.newFactory());
-            channelFactory = EpollServerSocketChannel::new;
-            Log.debug("Using Epoll transport type");
-        } else {
-            bossGroup = new MultiThreadIoEventLoopGroup(config.getBossGroupSize(), NioIoHandler.newFactory());
-            workerGroup = new MultiThreadIoEventLoopGroup(config.getWorkerGroupSize(), NioIoHandler.newFactory());
-            channelFactory = NioServerSocketChannel::new;
-            Log.debug("Using Java NIO transport type");
+        String transportTypeName = config.getTransportType().toUpperCase(Locale.ROOT);
+        TransportType transportType;
+        try {
+            transportType = TransportType.valueOf(transportTypeName);
+        } catch (Exception e) {
+            Log.debug("Unknown transport type '" + transportTypeName + "'. Using NIO.");
+            transportType = TransportType.NIO;
         }
+
+        if (!transportType.isAvailable()) {
+            Log.debug("Transport type " + transportType.name() + " is not available! Using NIO.");
+            transportType = TransportType.NIO;
+        }
+
+        Log.debug("Using " + transportType.name() + " transport type");
+
+        ChannelFactory<? extends ServerChannel> channelFactory = transportType.getChannelFactory();
+        IoHandlerFactory ioHandlerFactory = transportType.getIoHandlerFactory();
+
+        bossGroup = new MultiThreadIoEventLoopGroup(config.getBossGroupSize(), ioHandlerFactory);
+        workerGroup = new MultiThreadIoEventLoopGroup(config.getWorkerGroupSize(), ioHandlerFactory);
 
         new ServerBootstrap()
                 .group(bossGroup, workerGroup)

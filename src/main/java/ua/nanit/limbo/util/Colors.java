@@ -18,6 +18,7 @@
 package ua.nanit.limbo.util;
 
 import lombok.experimental.UtilityClass;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 @UtilityClass
 public class Colors {
@@ -25,8 +26,11 @@ public class Colors {
     private static final char CHAR_FROM = '&';
     private static final char CHAR_TO = '§';
 
-    public static String of(String text) {
-        if (text == null) return null;
+    @Nullable
+    public static String of(@Nullable String text) {
+        if (text == null) {
+            return null;
+        }
         return text.replace(CHAR_FROM, CHAR_TO);
     }
 }

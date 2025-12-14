@@ -17,15 +17,14 @@
 
 package ua.nanit.limbo.connection;
 
-import com.grack.nanojson.JsonArray;
-import com.grack.nanojson.JsonObject;
-import com.grack.nanojson.JsonParser;
-import com.grack.nanojson.JsonParserException;
+import com.google.gson.*;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import ua.nanit.limbo.connection.pipeline.PacketDecoder;
 import ua.nanit.limbo.connection.pipeline.PacketEncoder;
@@ -65,9 +64,13 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
     private Version clientVersion;
     private SocketAddress address;
 
+    @Setter
     private int velocityLoginMessageId = -1;
 
-    public ClientConnection(Channel channel, LimboServer server, PacketDecoder decoder, PacketEncoder encoder) {
+    public ClientConnection(@NonNull Channel channel,
+                            @NonNull LimboServer server,
+                            @NonNull PacketDecoder decoder,
+                            @NonNull PacketEncoder encoder) {
         this.server = server;
         this.channel = channel;
         this.decoder = decoder;
@@ -76,10 +79,12 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
         this.gameProfile = new GameProfile();
     }
 
+    @NonNull
     public UUID getUuid() {
         return gameProfile.getUuid();
     }
 
+    @NonNull
     public String getUsername() {
         return gameProfile.getUsername();
     }
@@ -106,7 +111,7 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
         handlePacket(msg);
     }
 
-    public void handlePacket(Object packet) {
+    public void handlePacket(@NonNull Object packet) {
         if (packet instanceof Packet) {
             ((Packet) packet).handle(this, server);
         }
@@ -203,7 +208,10 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
     }
 
     public void onKnownPacksReceived() {
-        if (clientVersion.moreOrEqual(Version.V1_21_9)) {
+        // TODO Simplify...
+        if (clientVersion.moreOrEqual(Version.V1_21_11)) {
+            writePackets(PacketSnapshots.PACKETS_REGISTRY_DATA_1_21_11);
+        } else if (clientVersion.moreOrEqual(Version.V1_21_9)) {
             writePackets(PacketSnapshots.PACKETS_REGISTRY_DATA_1_21_9);
         } else if (clientVersion.moreOrEqual(Version.V1_21_7)) {
             writePackets(PacketSnapshots.PACKETS_REGISTRY_DATA_1_21_7);
@@ -226,13 +234,13 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
         sendPacket(PacketSnapshots.PACKET_FINISH_CONFIGURATION);
     }
 
-    private void writePackets(List<PacketSnapshot> packets) {
+    private void writePackets(@NonNull List<PacketSnapshot> packets) {
         for (PacketSnapshot packet : packets) {
             writePacket(packet);
         }
     }
 
-    public void disconnectLogin(String reason) {
+    public void disconnectLogin(@NonNull String reason) {
         if (isConnected() && state == State.LOGIN) {
             PacketDisconnect disconnect = new PacketDisconnect();
             disconnect.setReason(reason);
@@ -260,74 +268,90 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
         }
     }
 
-    public void sendPacket(Object packet) {
-        if (isConnected())
+    public void sendPacket(@NonNull Object packet) {
+        if (isConnected()) {
             channel.writeAndFlush(packet, channel.voidPromise());
+        }
     }
 
-    public void sendPacketAndClose(Object packet) {
-        if (isConnected())
+    public void sendPacketAndClose(@NonNull Object packet) {
+        if (isConnected()) {
             channel.writeAndFlush(packet).addListener(ChannelFutureListener.CLOSE);
+        }
     }
 
-    public void writePacket(Object packet) {
-        if (isConnected())
+    public void writePacket(@NonNull Object packet) {
+        if (isConnected()) {
             channel.write(packet, channel.voidPromise());
+        }
     }
 
     public boolean isConnected() {
         return channel.isActive();
     }
 
-    public void updateState(State state) {
+    public void updateState(@NonNull State state) {
         this.state = state;
         decoder.updateState(state);
         encoder.updateState(state);
     }
 
-    public void updateEncoderState(State state) {
+    public void updateEncoderState(@NonNull State state) {
         encoder.updateState(state);
     }
 
-    public void updateVersion(Version version) {
+    public void updateVersion(@NonNull Version version) {
         clientVersion = version;
         decoder.updateVersion(version);
         encoder.updateVersion(version);
     }
 
-    public void setAddress(String host) {
+    public void setAddress(@NonNull String host) {
         this.address = new InetSocketAddress(host, ((InetSocketAddress) this.address).getPort());
     }
 
-    boolean checkBungeeGuardHandshake(String handshake) {
+    public boolean checkBungeeGuardHandshake(@NonNull String handshake) {
         String[] split = handshake.split("\00");
 
-        if (split.length != 4)
+        if (split.length != 4) {
             return false;
+        }
 
         String socketAddressHostname = split[1];
         UUID uuid = UuidUtil.fromString(split[2]);
-        JsonArray arr;
-
-        try {
-            arr = JsonParser.array().from(split[3]);
-        } catch (JsonParserException e) {
-            return false;
-        }
 
         String token = null;
 
-        for (Object obj : arr) {
-            if (obj instanceof JsonObject prop) {
-                if (prop.getString("name").equals("bungeeguard-token")) {
-                    token = prop.getString("value");
-                    break;
+        try {
+            JsonElement rootElement = JsonParser.parseString(split[3]);
+            if (!rootElement.isJsonArray()) {
+                return false;
+            }
+
+            JsonArray jsonArray = rootElement.getAsJsonArray();
+            for (JsonElement jsonElement : jsonArray) {
+                if (jsonElement.isJsonObject()) {
+                    JsonObject jsonObject = jsonElement.getAsJsonObject();
+
+                    JsonElement nameElement = jsonObject.get("name");
+                    if (nameElement != null && nameElement.isJsonPrimitive()) {
+                        if (nameElement.getAsString().equals("bungeeguard-token")) {
+                            JsonElement valueElement = jsonObject.get("value");
+                            if (valueElement != null && valueElement.isJsonPrimitive()) {
+                                token = valueElement.getAsString();
+                                break;
+                            }
+                        }
+                    }
                 }
             }
+        } catch (JsonParseException e) {
+            return false;
         }
 
-        if (!server.getConfig().getInfoForwarding().hasToken(token))
+        if (!server.getConfig().getInfoForwarding().hasToken(token)) {
             return false;
+        }
 
         setAddress(socketAddressHostname);
         gameProfile.setUuid(uuid);
@@ -337,15 +361,7 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
         return true;
     }
 
-    int getVelocityLoginMessageId() {
-        return velocityLoginMessageId;
-    }
-
-    void setVelocityLoginMessageId(int velocityLoginMessageId) {
-        this.velocityLoginMessageId = velocityLoginMessageId;
-    }
-
-    boolean checkVelocityKeyIntegrity(ByteMessage buf) {
+    public boolean checkVelocityKeyIntegrity(@NonNull ByteMessage buf) {
         byte[] signature = new byte[32];
         buf.readBytes(signature);
         byte[] data = new byte[buf.readableBytes()];
@@ -354,14 +370,16 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
             Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(new SecretKeySpec(server.getConfig().getInfoForwarding().getSecretKey(), "HmacSHA256"));
             byte[] mySignature = mac.doFinal(data);
-            if (!MessageDigest.isEqual(signature, mySignature))
+            if (!MessageDigest.isEqual(signature, mySignature)) {
                 return false;
+            }
         } catch (InvalidKeyException | java.security.NoSuchAlgorithmException e) {
             throw new AssertionError(e);
         }
         int version = buf.readVarInt();
-        if (version != 1)
+        if (version != 1) {
             throw new IllegalStateException("Unsupported forwarding version " + version + ", wanted " + '\001');
+        }
         return true;
     }
 }

@@ -17,7 +17,10 @@
 
 package ua.nanit.limbo.protocol.packets.login;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import ua.nanit.limbo.connection.ClientConnection;
 import ua.nanit.limbo.connection.PlayerPublicKey;
 import ua.nanit.limbo.protocol.ByteMessage;
@@ -27,7 +30,9 @@ import ua.nanit.limbo.server.LimboServer;
 
 import java.util.UUID;
 
-@Getter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PacketLoginStart implements PacketIn {
 
     private String username;
@@ -35,7 +40,7 @@ public class PacketLoginStart implements PacketIn {
     private UUID uuid;
 
     @Override
-    public void decode(ByteMessage msg, Version version) {
+    public void decode(@NonNull ByteMessage msg, @NonNull Version version) {
         this.username = msg.readString(16);
 
         if (version.fromTo(Version.V1_19, Version.V1_19_1)) {
@@ -50,7 +55,7 @@ public class PacketLoginStart implements PacketIn {
     }
 
     @Override
-    public void handle(ClientConnection conn, LimboServer server) {
+    public void handle(@NonNull ClientConnection conn, @NonNull LimboServer server) {
         server.getPacketHandler().handle(conn, this);
     }
 

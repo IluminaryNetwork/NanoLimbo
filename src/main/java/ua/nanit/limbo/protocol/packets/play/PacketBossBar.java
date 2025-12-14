@@ -17,7 +17,10 @@
 
 package ua.nanit.limbo.protocol.packets.play;
 
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.protocol.registry.Version;
@@ -28,7 +31,9 @@ import java.util.UUID;
 /**
  * Packet for 1.9+
  */
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PacketBossBar implements PacketOut {
 
     private UUID uuid;
@@ -36,14 +41,14 @@ public class PacketBossBar implements PacketOut {
     private int flags;
 
     @Override
-    public void encode(ByteMessage msg, Version version) {
-        msg.writeUuid(uuid);
+    public void encode(@NonNull ByteMessage msg, @NonNull Version version) {
+        msg.writeUuid(this.uuid);
         msg.writeVarInt(0); // Create bossbar
-        msg.writeNbtMessage(bossBar.getText(), version);
-        msg.writeFloat(bossBar.getHealth());
-        msg.writeVarInt(bossBar.getColor().getIndex());
-        msg.writeVarInt(bossBar.getDivision().getIndex());
-        msg.writeByte(flags);
+        msg.writeNbtMessage(this.bossBar.getText(), version);
+        msg.writeFloat(this.bossBar.getHealth());
+        msg.writeVarInt(this.bossBar.getColor().getIndex());
+        msg.writeVarInt(this.bossBar.getDivision().getIndex());
+        msg.writeByte(this.flags);
     }
 
     @Override

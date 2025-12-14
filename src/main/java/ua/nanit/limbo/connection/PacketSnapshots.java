@@ -18,6 +18,7 @@
 package ua.nanit.limbo.connection;
 
 import io.netty.buffer.ByteBufAllocator;
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
@@ -81,13 +82,14 @@ public class PacketSnapshots {
     public static List<PacketSnapshot> PACKETS_REGISTRY_DATA_1_21_6;
     public static List<PacketSnapshot> PACKETS_REGISTRY_DATA_1_21_7;
     public static List<PacketSnapshot> PACKETS_REGISTRY_DATA_1_21_9;
+    public static List<PacketSnapshot> PACKETS_REGISTRY_DATA_1_21_11;
 
     public static PacketSnapshot PACKET_FINISH_CONFIGURATION;
 
     public static List<PacketSnapshot> PACKETS_EMPTY_CHUNKS;
     public static PacketSnapshot PACKET_START_WAITING_CHUNKS;
 
-    public static void initPackets(LimboServer server) {
+    public static void initPackets(@NonNull LimboServer server) {
         final String username = server.getConfig().getPingData().getVersion();
         final UUID uuid = UuidUtil.getOfflineModeUuid(username);
 
@@ -239,9 +241,12 @@ public class PacketSnapshots {
             return packetKnownPacks;
         });
 
+        // TODO Simplify...
         PACKET_UPDATE_TAGS = PacketSnapshot.of(PacketUpdateTags.class, (version) -> {
             PacketUpdateTags packetUpdateTags = new PacketUpdateTags();
-            if (version.moreOrEqual(Version.V1_21_9)) {
+            if (version.moreOrEqual(Version.V1_21_11)) {
+                packetUpdateTags.setTags(parseUpdateTags(server.getDimensionRegistry().getTags_1_21_11()));
+            } else if (version.moreOrEqual(Version.V1_21_9)) {
                 packetUpdateTags.setTags(parseUpdateTags(server.getDimensionRegistry().getTags_1_21_9()));
             } else if (version.moreOrEqual(Version.V1_21_7)) {
                 packetUpdateTags.setTags(parseUpdateTags(server.getDimensionRegistry().getTags_1_21_7()));
@@ -267,6 +272,7 @@ public class PacketSnapshots {
 
         PACKET_REGISTRY_DATA = PacketSnapshot.of(packetRegistryData);
 
+        // TODO Simplify...
         PACKETS_REGISTRY_DATA_1_20_5 = createRegistryData(server, server.getDimensionRegistry().getCodec_1_20_5());
         PACKETS_REGISTRY_DATA_1_21 = createRegistryData(server, server.getDimensionRegistry().getCodec_1_21());
         PACKETS_REGISTRY_DATA_1_21_2 = createRegistryData(server, server.getDimensionRegistry().getCodec_1_21_2());
@@ -275,6 +281,7 @@ public class PacketSnapshots {
         PACKETS_REGISTRY_DATA_1_21_6 = createRegistryData(server, server.getDimensionRegistry().getCodec_1_21_6());
         PACKETS_REGISTRY_DATA_1_21_7 = createRegistryData(server, server.getDimensionRegistry().getCodec_1_21_7());
         PACKETS_REGISTRY_DATA_1_21_9 = createRegistryData(server, server.getDimensionRegistry().getCodec_1_21_9());
+        PACKETS_REGISTRY_DATA_1_21_11 = createRegistryData(server, server.getDimensionRegistry().getCodec_1_21_11());
 
         PACKET_FINISH_CONFIGURATION = PacketSnapshot.of(new PacketFinishConfiguration());
 
@@ -285,23 +292,24 @@ public class PacketSnapshots {
 
         int chunkXOffset = 0; // Default x position is 0
         int chunkZOffset = 0; // Default z position is 0
-        int chunkEdgeSize = 1; // TODO Make configurable?
+        int chunkEdgeSize = 1;
 
         List<PacketSnapshot> emptyChunks = new ArrayList<>();
         // Make multiple chunks for edges
         for (int chunkX = chunkXOffset - chunkEdgeSize; chunkX <= chunkXOffset + chunkEdgeSize; ++chunkX) {
             for (int chunkZ = chunkZOffset - chunkEdgeSize; chunkZ <= chunkZOffset + chunkEdgeSize; ++chunkZ) {
-                PacketEmptyChunk packetEmptyChunk = new PacketEmptyChunk();
-                packetEmptyChunk.setX(chunkX);
-                packetEmptyChunk.setZ(chunkZ);
+                PacketChunkWithLight packetChunkWithLight = new PacketChunkWithLight();
+                packetChunkWithLight.setX(chunkX);
+                packetChunkWithLight.setZ(chunkZ);
 
-                emptyChunks.add(PacketSnapshot.of(packetEmptyChunk));
+                emptyChunks.add(PacketSnapshot.of(packetChunkWithLight));
             }
         }
         PACKETS_EMPTY_CHUNKS = emptyChunks;
     }
 
-    private static Map<String, Map<String, List<Integer>>> parseUpdateTags(CompoundBinaryTag tags) {
+    @NonNull
+    private static Map<String, Map<String, List<Integer>>> parseUpdateTags(@NonNull CompoundBinaryTag tags) {
         Map<String, Map<String, List<Integer>>> tagsMap = new HashMap<>();
 
         for (Map.Entry<String, ? extends BinaryTag> namedTag : tags) {
@@ -324,7 +332,8 @@ public class PacketSnapshots {
         return tagsMap;
     }
 
-    private static List<PacketSnapshot> createRegistryData(LimboServer server, CompoundBinaryTag dimensionTag) {
+    @NonNull
+    private static List<PacketSnapshot> createRegistryData(@NonNull LimboServer server, @NonNull CompoundBinaryTag dimensionTag) {
         List<PacketSnapshot> packetRegistries = new ArrayList<>();
         for (String registryType : dimensionTag.keySet()) {
             CompoundBinaryTag compoundRegistryType = dimensionTag.getCompound(registryType);

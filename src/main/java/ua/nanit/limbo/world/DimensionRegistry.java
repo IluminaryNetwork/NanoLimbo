@@ -18,6 +18,7 @@
 package ua.nanit.limbo.world;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.nbt.BinaryTagIO;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
@@ -62,6 +63,7 @@ public final class DimensionRegistry {
     private CompoundBinaryTag codec_1_21_6;
     private CompoundBinaryTag codec_1_21_7;
     private CompoundBinaryTag codec_1_21_9;
+    private CompoundBinaryTag codec_1_21_11;
 
     private CompoundBinaryTag tags_1_20_5;
     private CompoundBinaryTag tags_1_21;
@@ -71,8 +73,9 @@ public final class DimensionRegistry {
     private CompoundBinaryTag tags_1_21_6;
     private CompoundBinaryTag tags_1_21_7;
     private CompoundBinaryTag tags_1_21_9;
+    private CompoundBinaryTag tags_1_21_11;
 
-    public void load(String def) throws IOException {
+    public void load(@NonNull String def) throws IOException {
         codec_1_16 = readCompoundBinaryTag("/dimension/codec_1_16.nbt");
         codec_1_16_2 = readCompoundBinaryTag("/dimension/codec_1_16_2.nbt");
         codec_1_17 = readCompoundBinaryTag("/dimension/codec_1_17.nbt");
@@ -89,6 +92,7 @@ public final class DimensionRegistry {
         codec_1_21_6 = readCompoundBinaryTag("/dimension/codec_1_21_6.nbt");
         codec_1_21_7 = readCompoundBinaryTag("/dimension/codec_1_21_7.nbt");
         codec_1_21_9 = readCompoundBinaryTag("/dimension/codec_1_21_9.nbt");
+        codec_1_21_11 = readCompoundBinaryTag("/dimension/codec_1_21_11.nbt");
 
         tags_1_20_5 = readCompoundBinaryTag("/dimension/tags_1_20_5.nbt");
         tags_1_21 = readCompoundBinaryTag("/dimension/tags_1_21.nbt");
@@ -98,6 +102,7 @@ public final class DimensionRegistry {
         tags_1_21_6 = readCompoundBinaryTag("/dimension/tags_1_21_6.nbt");
         tags_1_21_7 = readCompoundBinaryTag("/dimension/tags_1_21_7.nbt");
         tags_1_21_9 = readCompoundBinaryTag("/dimension/tags_1_21_9.nbt");
+        tags_1_21_11 = readCompoundBinaryTag("/dimension/tags_1_21_11.nbt");
 
         defaultDimension_1_16 = getLegacyDimension(def);
         defaultDimension_1_16_2 = getModernDimension(def, codec_1_16_2);
@@ -112,7 +117,8 @@ public final class DimensionRegistry {
         dimension_1_21_6 = getModernDimension(def, codec_1_21_6);
     }
 
-    private Dimension getLegacyDimension(String def) {
+    @NonNull
+    private Dimension getLegacyDimension(@NonNull String def) {
         return switch (def) {
             case "minecraft:overworld" -> new Dimension(0, def, null);
             case "minecraft:the_nether" -> new Dimension(-1, def, null);
@@ -124,7 +130,8 @@ public final class DimensionRegistry {
         };
     }
 
-    private Dimension getModernDimension(String def, CompoundBinaryTag tag) {
+    @NonNull
+    private Dimension getModernDimension(@NonNull String def, @NonNull CompoundBinaryTag tag) {
         ListBinaryTag dimensions = tag.getCompound("minecraft:dimension_type").getList("value");
 
         for (int i = 0; i < dimensions.size(); i++) {
@@ -143,7 +150,8 @@ public final class DimensionRegistry {
         return new Dimension(0, "minecraft:overworld", overWorld);
     }
 
-    private CompoundBinaryTag readCompoundBinaryTag(String resPath) throws IOException {
+    @NonNull
+    private CompoundBinaryTag readCompoundBinaryTag(@NonNull String resPath) throws IOException {
         try (InputStream in = server.getClass().getResourceAsStream(resPath)) {
             return BinaryTagIO.unlimitedReader().read(in, BinaryTagIO.Compression.GZIP);
         }

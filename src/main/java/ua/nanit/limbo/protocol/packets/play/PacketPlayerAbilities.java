@@ -17,12 +17,17 @@
 
 package ua.nanit.limbo.protocol.packets.play;
 
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.protocol.registry.Version;
 
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PacketPlayerAbilities implements PacketOut {
 
     private int flags = 0x02;
@@ -30,10 +35,10 @@ public class PacketPlayerAbilities implements PacketOut {
     private float fieldOfView = 0.1F;
 
     @Override
-    public void encode(ByteMessage msg, Version version) {
-        msg.writeByte(flags);
-        msg.writeFloat(flyingSpeed);
-        msg.writeFloat(fieldOfView);
+    public void encode(@NonNull ByteMessage msg, @NonNull Version version) {
+        msg.writeByte(this.flags);
+        msg.writeFloat(this.flyingSpeed);
+        msg.writeFloat(this.fieldOfView);
     }
 
     @Override

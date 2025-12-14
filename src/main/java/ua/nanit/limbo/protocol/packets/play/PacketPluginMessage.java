@@ -18,32 +18,37 @@
 package ua.nanit.limbo.protocol.packets.play;
 
 import io.netty.handler.codec.DecoderException;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketIn;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.protocol.registry.Version;
 
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PacketPluginMessage implements PacketIn, PacketOut {
 
     private String channel;
     private byte[] data;
 
     @Override
-    public void encode(ByteMessage msg, Version version) {
-        msg.writeString(channel);
-        msg.writeBytes(data);
+    public void encode(@NonNull ByteMessage msg, @NonNull Version version) {
+        msg.writeString(this.channel);
+        msg.writeBytes(this.data);
     }
 
     @Override
-    public void decode(ByteMessage msg, Version version) {
-        channel = msg.readString();
+    public void decode(@NonNull ByteMessage msg, @NonNull Version version) {
+        this.channel = msg.readString();
         int readableBytes = msg.readableBytes();
         if (readableBytes > Short.MAX_VALUE) {
             throw new DecoderException("Cannot receive payload larger than " + Short.MAX_VALUE);
         }
-        data = new byte[msg.readableBytes()];
+        this.data = new byte[msg.readableBytes()];
         msg.readBytes(data);
     }
 

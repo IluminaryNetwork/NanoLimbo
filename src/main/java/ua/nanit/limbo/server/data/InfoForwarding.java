@@ -17,7 +17,7 @@
 
 package ua.nanit.limbo.server.data;
 
-import lombok.Getter;
+import lombok.Data;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -27,14 +27,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
 
-@Getter
+@Data
 public class InfoForwarding {
 
     private Type type;
     private byte[] secretKey;
     private List<String> tokens;
 
-    public boolean hasToken(String token) {
+    public boolean hasToken(@Nullable String token) {
         return tokens != null && token != null && tokens.contains(token);
     }
 

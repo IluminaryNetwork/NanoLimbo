@@ -17,7 +17,10 @@
 
 package ua.nanit.limbo.protocol.packets.play;
 
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import ua.nanit.limbo.protocol.ByteMessage;
 import ua.nanit.limbo.protocol.PacketOut;
 import ua.nanit.limbo.protocol.registry.Version;
@@ -28,7 +31,9 @@ import java.util.UUID;
 /**
  * This packet was very simplified and using only for ADD_PLAYER action
  */
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PacketPlayerInfo implements PacketOut {
 
     private int gameMode = 3;
@@ -36,9 +41,9 @@ public class PacketPlayerInfo implements PacketOut {
     private UUID uuid;
 
     @Override
-    public void encode(ByteMessage msg, Version version) {
+    public void encode(@NonNull ByteMessage msg, @NonNull Version version) {
         if (version.less(Version.V1_8)) {
-            msg.writeString(username);
+            msg.writeString(this.username);
             msg.writeBoolean(true); // Is online
             msg.writeShort(0);
         } else {
@@ -50,24 +55,24 @@ public class PacketPlayerInfo implements PacketOut {
                 msg.writeEnumSet(actions, Action.class);
 
                 msg.writeVarInt(1); // Array length (1 element)
-                msg.writeUuid(uuid); // UUID
-                msg.writeString(username); //Username
+                msg.writeUuid(this.uuid); // UUID
+                msg.writeString(this.username); //Username
                 msg.writeVarInt(0); //Properties (0 is empty)
 
                 msg.writeBoolean(true); //Update listed
-                msg.writeVarInt(gameMode); //Gamemode
+                msg.writeVarInt(this.gameMode); //Gamemode
                 return;
             }
-            
+
             msg.writeVarInt(0); // Add player action
             msg.writeVarInt(1);
-            msg.writeUuid(uuid);
-            msg.writeString(username);
+            msg.writeUuid(this.uuid);
+            msg.writeString(this.username);
             msg.writeVarInt(0);
-            msg.writeVarInt(gameMode);
+            msg.writeVarInt(this.gameMode);
             msg.writeVarInt(60);
             msg.writeBoolean(false);
-            
+
             if (version.moreOrEqual(Version.V1_19)) {
                 msg.writeBoolean(false);
             }

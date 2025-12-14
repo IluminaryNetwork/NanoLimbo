@@ -14,7 +14,7 @@ General features:
 * Support for [BungeeGuard](https://www.spigotmc.org/resources/79601/) handshake format.
 * Multiple versions support.
 * Fully configurable.
-* Lightweight. App size around **3MB**.
+* Lightweight. App size around **4MB**.
 
 ![](https://i.imgur.com/sT8p1Gz.png)
 
@@ -55,10 +55,10 @@ Required software: JRE 17+
 
 The installation process is simple.
 
-1. Download the latest version of the program [**here**](https://github.com/Nan1t/NanoLimbo/releases).
+1. Download the latest version of the program [**here**](https://github.com/BoomEaro/NanoLimbo/releases).
 2. Put the jar file in the folder you want.
 3. Create a start script as you did for Bukkit or BungeeCord, with a command like this:
-   `java -jar NanoLimbo-<version>.jar`
+   `java -jar NanoLimbo.jar`
 4. The server will create `settings.yml` file, which is the server configuration. 
 5. Configure it as you want and restart the server.
 

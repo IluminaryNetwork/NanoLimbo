@@ -43,5 +43,6 @@ public class SocketAddressSerializer implements TypeSerializer<SocketAddress> {
     }
 
     @Override
-    public void serialize(Type type, @Nullable SocketAddress obj, ConfigurationNode node) {}
+    public void serialize(Type type, @Nullable SocketAddress obj, ConfigurationNode node) {
+    }
 }

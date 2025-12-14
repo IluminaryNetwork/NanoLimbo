@@ -18,16 +18,17 @@
 package ua.nanit.limbo.configuration;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.ConfigurationOptions;
 import org.spongepowered.configurate.serialize.TypeSerializerCollection;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
-import ua.nanit.limbo.util.Colors;
 import ua.nanit.limbo.server.data.BossBar;
 import ua.nanit.limbo.server.data.InfoForwarding;
 import ua.nanit.limbo.server.data.PingData;
 import ua.nanit.limbo.server.data.Title;
+import ua.nanit.limbo.util.Colors;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -72,7 +73,7 @@ public final class LimboConfig {
     private long readTimeout;
     private int debugLevel;
 
-    private boolean useEpoll;
+    private String transportType;
     private int bossGroupSize;
     private int workerGroupSize;
 
@@ -132,7 +133,7 @@ public final class LimboConfig {
         readTimeout = conf.node("readTimeout").getLong();
         debugLevel = conf.node("debugLevel").getInt();
 
-        useEpoll = conf.node("netty", "useEpoll").getBoolean(true);
+        transportType = conf.node("netty", "transportType").getString("epoll");
         bossGroupSize = conf.node("netty", "threads", "bossGroup").getInt(1);
         workerGroupSize = conf.node("netty", "threads", "workerGroup").getInt(4);
 
@@ -143,15 +144,17 @@ public final class LimboConfig {
         maxPacketBytesRate = conf.node("traffic", "maxPacketBytesRate").getDouble(-1.0);
     }
 
+    @NonNull
     private BufferedReader getReader() throws IOException {
         String name = "settings.yml";
         Path filePath = Paths.get(root.toString(), name);
 
         if (!Files.exists(filePath)) {
-            InputStream stream = getClass().getResourceAsStream( "/" + name);
+            InputStream stream = getClass().getResourceAsStream("/" + name);
 
-            if (stream == null)
+            if (stream == null) {
                 throw new FileNotFoundException("Cannot find settings resource file");
+            }
 
             Files.copy(stream, filePath);
         }
@@ -159,6 +162,7 @@ public final class LimboConfig {
         return Files.newBufferedReader(filePath);
     }
 
+    @NonNull
     private TypeSerializerCollection getSerializers() {
         return TypeSerializerCollection.builder()
                 .register(SocketAddress.class, new SocketAddressSerializer())
