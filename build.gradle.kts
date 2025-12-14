@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    implementation("ch.qos.logback:logback-classic:1.5.18")
+    compileOnly("org.slf4j:slf4j-api:1.7.36")
     implementation("org.spongepowered:configurate-yaml:4.2.0")
 
     implementation("io.netty:netty-handler:4.2.7.Final")
@@ -48,9 +48,6 @@ buildConfig {
 
 tasks.shadowJar {
     from("LICENSE")
-
-    archiveClassifier.set("")
-    archiveVersion.set("")
 
     manifest {
         attributes(
